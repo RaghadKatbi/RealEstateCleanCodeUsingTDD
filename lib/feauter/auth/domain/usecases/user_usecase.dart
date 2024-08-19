@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
-import '../../data/model/register_model.dart';
+
+import '../entities/user.dart';
 import '../repositories/user_repsitory.dart';
 
 class UserUseCase {
