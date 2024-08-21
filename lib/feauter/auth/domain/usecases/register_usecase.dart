@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:real_estate/core/error/failer.dart';
 
 import 'package:real_estate/feauter/auth/domain/entities/register.dart';
 
@@ -9,7 +10,7 @@ class RegisterUseCase {
 
   RegisterUseCase({required this.repository});
 
-  Future<Either<String, bool>> call(Register register) async {
+  Future<Either<Failure, Register>> call(Register register) async {
     return await repository.register(register);
   }
 }

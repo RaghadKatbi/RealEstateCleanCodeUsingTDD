@@ -7,7 +7,7 @@ class VerificationUseCase{
 final VerificationRepository repository;
 
   VerificationUseCase({required this.repository});
-  Future<Either<String, bool>> call ( Verification verification )async{
+  Future<Either<String, bool>> call ( Verification verification ) async{
     return await repository.verification(verification);
   }
 }

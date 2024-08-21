@@ -2,16 +2,17 @@ import 'package:equatable/equatable.dart';
 
 class Register extends Equatable {
   final String name;
-  final String confirmPassword;
   final String phone;
+  final String updatedAt;
+  final String createdAt;
+  final int id;
   final String password;
+  final String confirmPassword;
 
-  const Register(
-      {required this.phone,
-      required this.password,
-      required this.name,
-      required this.confirmPassword});
+  const Register(this.updatedAt, this.createdAt, this.id, this.phone,
+      this.password, this.name, this.confirmPassword);
 
   @override
-  List<Object?> get props => [phone, password, confirmPassword, name];
+  List<Object?> get props =>
+      [phone, password, confirmPassword, name, updatedAt, createdAt, id];
 }

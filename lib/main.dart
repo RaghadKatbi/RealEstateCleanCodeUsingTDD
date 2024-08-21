@@ -1,7 +1,20 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:real_estate/core/mythem.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:real_estate/core/api/dio_consumer.dart';
+import 'package:real_estate/core/network/network_info.dart';
+import 'package:real_estate/feauter/auth/data/datasources/auth_remote_data_sources.dart';
+import 'package:real_estate/feauter/auth/data/repository/login_repository_implement.dart';
+import 'package:real_estate/feauter/auth/data/repository/register_repository_implementation.dart';
+import 'package:real_estate/feauter/auth/domain/usecases/login_usecase.dart';
+import 'package:real_estate/feauter/auth/domain/usecases/register_usecase.dart';
+import 'package:real_estate/feauter/auth/pesntation/bloc_auth/auth_cubit.dart';
+import 'package:real_estate/feauter/auth/pesntation/pages/login.dart';
+import 'core/my_them/mythem.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -11,26 +24,30 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'المحترف للعقار',
-      theme: appTheme,
-      home: const MyHomePage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => AuthCubit(
+              loginUser: LoginUseCase(
+                  repository: LoginRepositoryImplement(
+                      authRemoteDataSources: AuthRemoteDataSourcesDio(
+                          api: DioConsumer(dio: Dio())),
+                      networkInfo:
+                          NetworkInfoImpl(InternetConnectionChecker()))),
+              registerUser: RegisterUseCase(
+                  repository: RegisterRepositoryImplementation(
+                      authRemoteDataSources: AuthRemoteDataSourcesDio(
+                          api: DioConsumer(dio: Dio())),
+                      networkInfo:
+                          NetworkInfoImpl(InternetConnectionChecker())))),
+        )
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'المحترف للعقار',
+        theme: appTheme,
+        home: LoginPage(),
+      ),
     );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key,});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-
-    return const Scaffold();
   }
 }
