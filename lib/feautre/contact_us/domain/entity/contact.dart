@@ -17,6 +17,5 @@ class Contact extends Equatable {
       required this.phone});
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, name, message, createdAt, updatedAt, phone];
 }

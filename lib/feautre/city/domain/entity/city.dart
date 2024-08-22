@@ -10,6 +10,5 @@ class City extends Equatable {
   const City({required this.id,required this.name, required this.createdAt,required this.updatedAt,required this.cityImage});
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, name, createdAt, updatedAt, cityImage];
 }

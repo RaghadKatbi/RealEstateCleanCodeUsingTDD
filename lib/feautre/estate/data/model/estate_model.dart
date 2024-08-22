@@ -1,0 +1,60 @@
+import 'package:real_estate/feautre/estate/domain/entity/estate.dart';
+
+class EstateModel extends Estate {
+  const EstateModel(
+      {required super.id,
+      required super.type,
+      required super.purpose,
+      required super.rooms,
+      required super.bathrooms,
+      required super.price,
+      required super.state,
+      required super.space,
+      required super.direction,
+      required super.floor,
+      required super.description,
+      required super.streetWidth,
+      required super.location,
+      required super.features,
+      required super.neighborhoodId,
+      required super.estateImage,
+      required super.estateVideo,
+      required super.createdAt,
+      required super.updatedAt,
+      required super.buildingRank,
+      required super.license,
+      required super.meterPrice,
+      required super.numberShow,
+      required super.status,
+      required super.userId});
+
+  factory EstateModel.fromJson(Map<String, dynamic> json) {
+    return EstateModel(
+      id: json['id'],
+      type: json['type'],
+      purpose: json['purpose'],
+      rooms: json['rooms'],
+      bathrooms: json['bathrooms'],
+      price: json['price'],
+      state: json['state'],
+      space: json['space'],
+      direction: json['direction'],
+      floor: json['floor'],
+      description: json['description'],
+      streetWidth: json['streetWidth'],
+      location: json['location'],
+      features: json['features'],
+      neighborhoodId: json['neighborhoodId'],
+      estateImage: json['estateImage'],
+      estateVideo: json['estateVideo'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      buildingRank: json['buildingRank'],
+      license: json['license'],
+      meterPrice: json['meterPrice'],
+      numberShow: json['numberShow'],
+      status: json['status'],
+      userId: json['userId'],
+    );
+  }
+}

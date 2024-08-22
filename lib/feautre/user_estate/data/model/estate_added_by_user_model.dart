@@ -1,0 +1,60 @@
+import 'package:real_estate/feautre/user_estate/domain/entity/estate_added_by_user.dart';
+
+class EstateAddedByUserModel extends EstateAddedByUser {
+  const EstateAddedByUserModel(
+      {required super.image,
+      required super.video,
+      required super.id,
+      required super.propertyType,
+      required super.propertyPurpose,
+      required super.rooms,
+      required super.bathrooms,
+      required super.price,
+      required super.condition,
+      required super.space,
+      required super.direction,
+      required super.license,
+      required super.floor,
+      required super.description,
+      required super.meterPrice,
+      required super.streetWidth,
+      required super.location,
+      required super.features,
+      required super.neighborhoodId,
+      required super.userId,
+      required super.buildingRank,
+      required super.status,
+      required super.note,
+      required super.updatedAt,
+      required super.createdAt});
+
+  factory EstateAddedByUserModel.fromJson(Map<String, dynamic> json) {
+    return EstateAddedByUserModel(
+      image: json['image'],
+      video: json['video'],
+      id: json['id'],
+      propertyType: json['propertyType'],
+      propertyPurpose: json['propertyPurpose'],
+      rooms: json['rooms'],
+      bathrooms: json['bathrooms'],
+      price: json['price'],
+      condition: json['condition'],
+      space: json['space'],
+      direction: json['direction'],
+      license: json['license'],
+      floor: json['floor'],
+      description: json['description'],
+      meterPrice: json['meterPrice'],
+      streetWidth: json['streetWidth'],
+      location: json['location'],
+      features: json['features'],
+      neighborhoodId: json['neighborhoodId'],
+      userId: json['userId'],
+      buildingRank: json['buildingRank'],
+      status: json['status'],
+      note: json['note'],
+      updatedAt: json['updatedAt'],
+      createdAt: json['createdAt'],
+    );
+  }
+}

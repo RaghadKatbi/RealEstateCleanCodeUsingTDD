@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-import 'city.dart';
 
 class Region extends Equatable {
   final int id;
@@ -8,7 +7,6 @@ class Region extends Equatable {
   final int cityId;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final City city;
 
   const Region({
     required this.id,
@@ -16,9 +14,8 @@ class Region extends Equatable {
     required this.cityId,
     required this.createdAt,
     required this.updatedAt,
-    required this.city,
   });
 
   @override
-  List<Object> get props => [id, name, cityId, createdAt, updatedAt, city];
+  List<Object> get props => [id, name, cityId, createdAt, updatedAt,];
 }

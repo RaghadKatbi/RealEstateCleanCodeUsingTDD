@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../../city/domain/entity/neighborhood.dart';
+
 
 class Estate extends Equatable {
   final int id;
@@ -27,7 +27,6 @@ class Estate extends Equatable {
   final String? status;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final Neighborhood neighborhood;
 
   const Estate({
     required this.id,
@@ -55,7 +54,6 @@ class Estate extends Equatable {
     this.status,
     required this.createdAt,
     required this.updatedAt,
-    required this.neighborhood,
   });
 
   @override
@@ -85,7 +83,6 @@ class Estate extends Equatable {
     status,
     createdAt,
     updatedAt,
-    neighborhood,
   ];
 }
 
