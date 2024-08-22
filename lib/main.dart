@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:real_estate/core/api/dio_consumer.dart';
 import 'package:real_estate/core/network/network_info.dart';
-import 'package:real_estate/feauter/auth/data/datasources/auth_remote_data_sources.dart';
-import 'package:real_estate/feauter/auth/data/repository/login_repository_implement.dart';
-import 'package:real_estate/feauter/auth/data/repository/register_repository_implementation.dart';
-import 'package:real_estate/feauter/auth/domain/usecases/login_usecase.dart';
-import 'package:real_estate/feauter/auth/domain/usecases/register_usecase.dart';
-import 'package:real_estate/feauter/auth/pesntation/bloc_auth/auth_cubit.dart';
-import 'package:real_estate/feauter/auth/pesntation/pages/login.dart';
+import 'package:real_estate/feautre/auth/data/datasources/auth_remote_data_sources.dart';
+import 'package:real_estate/feautre/auth/data/repository/login_repository_implement.dart';
+import 'package:real_estate/feautre/auth/data/repository/register_repository_implementation.dart';
+import 'package:real_estate/feautre/auth/domain/usecases/login_usecase.dart';
+import 'package:real_estate/feautre/auth/domain/usecases/register_usecase.dart';
+import 'package:real_estate/feautre/auth/pesntation/bloc_auth/auth_cubit.dart';
+import 'package:real_estate/feautre/auth/pesntation/pages/login.dart';
 import 'core/my_them/mythem.dart';
 
 void main() async {
