@@ -3,6 +3,9 @@ class EndPoint {
   static String allCities="all_cities";
   static String signIn = "auth/login";
   static String signUp = "auth/register";
+  static String contactUs = "store_contact";
+  static String getByCity = "get_by_city/حلب";
+  static String getByCityType = "get_by_city_type/شقة/حلب/ايجار";
 }
 
 class ApiKey {

@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:real_estate/core/widget/loading.dart';
 import 'package:real_estate/feautre/auth/pesntation/pages/register.dart';
+import 'package:real_estate/feautre/city/pesntation/pages/city_page.dart';
 
 import '../../../../core/widget/my_textfield.dart';
 import '../bloc_auth/auth_cubit.dart';
 
 class LoginPage extends StatelessWidget {
-   LoginPage({super.key});
+  LoginPage({super.key});
 
   final _formKey = GlobalKey<FormState>();
 
@@ -110,6 +111,12 @@ class LoginPage extends StatelessWidget {
                                           passwordController.text);
                                       if (state is LoginSuccess) {
                                         print("success");
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const CityPage(),
+                                            ));
                                       } else if (state is LoginFailure) {
                                         print(state.message);
                                       }

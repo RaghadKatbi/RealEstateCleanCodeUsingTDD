@@ -20,7 +20,7 @@ class AuthRemoteDataSourcesDio implements AuthRemoteDataSources {
     try {
       final response = await api.post(EndPoint.signIn,
           queryParameters: {"phone": login.phone, "password": login.password});
-      final user = LoginModel.fromJson(response);
+      final user = LoginModel.fromJson(response['token']);
       return user;
     } on ServerException {
       throw ServerException();
