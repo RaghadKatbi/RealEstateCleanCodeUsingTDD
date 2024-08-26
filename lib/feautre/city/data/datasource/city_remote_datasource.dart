@@ -1,7 +1,5 @@
 import 'package:real_estate/core/api/end_ponits.dart';
-
 import '../../../../core/api/api_consumer.dart';
-import '../../../../core/error/exptions.dart';
 import '../model/city_model.dart';
 
 abstract class CityRemoteDatasource {
@@ -15,13 +13,11 @@ class CityRemoteDatasourceImp implements CityRemoteDatasource{
   CityRemoteDatasourceImp({required this.api});
   @override
   Future<List<CityModel>> getAllCities() async {
-    try{
       final response = await api.get(EndPoint.allCities);
-      return response['data'];
-    }
-    on ServerException {
-      throw ServerException();
-    }
+      List<CityModel> cities = (response['data'] as List)
+          .map((city) => CityModel.fromJson(city))
+          .toList();
+      return cities;
   }
 
 }

@@ -26,7 +26,7 @@ class AuthCubit extends Cubit<AuthState> {
         emit(LoginFailure(message: _mapFailureToMessage(failure)));
       },
       (token) {
-        emit(LoginSuccess());
+        emit(LoginSuccess(token: token.token));
       },
     );
   }
@@ -47,17 +47,20 @@ class AuthCubit extends Cubit<AuthState> {
         emit(RegisterFailure(message: _mapFailureToMessage(failure)));
       },
       (token) {
-        emit(RegisterSuccess(user: RegisterModel.fromJson(token as Map<String, dynamic>) ));
+        emit(RegisterSuccess());
       },
     );
   }
 
   String _mapFailureToMessage(Failure failure) {
-    switch (failure.runtimeType) {
-      case ServerFailure:
+    print(failure);
+    switch (failure) {
+      case ServerFailure _:
         return "SERVER_FAILURE_MESSAGE";
-      case OfflineFailure:
-        return "OFFLINE_FAILURE_MESSAGE";
+      case OfflineFailure _:
+        return "تأكد من اتصال جهازك بلانترنت";
+      case DioFailure _ :
+        return "phone error";
       default:
         return "Unexpected Error , Please try again later .";
     }

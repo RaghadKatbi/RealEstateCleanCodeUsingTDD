@@ -1,7 +1,8 @@
 part of 'city_cubit.dart';
 
 @immutable
-sealed class CityState {}
+sealed class CityState {
+}
 
 final class CityInitial extends CityState {}
 
@@ -9,7 +10,6 @@ final class CityLoading extends CityState {}
 
 final class CitySuccess extends CityState {
   final List<City> city;
-
   CitySuccess({required this.city});
 
 }

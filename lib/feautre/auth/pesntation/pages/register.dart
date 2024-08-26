@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:real_estate/core/widget/loading.dart';
+import 'package:real_estate/feautre/auth/pesntation/pages/verification.dart';
 import '../../../../core/widget/my_textfield.dart';
 import '../bloc_auth/auth_cubit.dart';
 import 'login.dart';
@@ -170,16 +172,25 @@ class _RegisterPageState extends State<RegisterPage> {
                                   phone.text,
                                   password.text,
                                   confirmPassword.text);
+                              if (state is RegisterSuccess) {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const VerificationPage(),
+                                    ));
+                              }
                             }
                           },
-                          child: Text(
-                            "إنشاء حساب",
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(18),
-                              color: const Color(0xff0c3c6d),
-                              fontFamily: 'changes',
-                            ),
-                          ),
+                          child: state is RegisterLoading
+                              ? const LoadingWidget()
+                              : Text(
+                                  "إنشاء حساب",
+                                  style: TextStyle(
+                                    fontSize: ScreenUtil().setSp(18),
+                                    color: const Color(0xff0c3c6d),
+                                    fontFamily: 'changes',
+                                  ),
+                                ),
                         ),
                       ),
                     );

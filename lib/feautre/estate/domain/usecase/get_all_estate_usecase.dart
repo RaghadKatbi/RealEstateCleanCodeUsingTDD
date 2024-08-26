@@ -9,8 +9,8 @@ class GetAllEstateUseCase{
 
   GetAllEstateUseCase({required this.repository});
 
-  Future<Either<Failure,List<Estate>>> call() async {
-    return await repository.getAllEstate();
+  Future<Either<Failure,List<Estate>>> call(String nameCity) async {
+    return await repository.getAllEstate(nameCity);
   }
 
 }

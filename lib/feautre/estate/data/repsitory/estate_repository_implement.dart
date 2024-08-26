@@ -14,9 +14,9 @@ class EstateRepositoryImplement implements EstateRepository {
       {required this.dataSourcesEstate, required this.networkInfo});
 
   @override
-  Future<Either<Failure, List<Estate>>> getAllEstate() async {
+  Future<Either<Failure, List<Estate>>> getAllEstate(String nameCity) async {
     if (await networkInfo.isConnected) {
-      final response = await dataSourcesEstate.getAllEstate();
+      final response = await dataSourcesEstate.getAllEstate(nameCity);
       return right(response);
     } else {
       return Left(OfflineFailure());

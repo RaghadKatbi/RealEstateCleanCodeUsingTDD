@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:real_estate/core/widget/loading.dart';
 import 'package:real_estate/feautre/auth/pesntation/pages/register.dart';
-import 'package:real_estate/feautre/city/pesntation/pages/city_page.dart';
-
+import 'package:real_estate/feautre/auth/pesntation/pages/verification.dart';
 import '../../../../core/widget/my_textfield.dart';
+import '../../../../core/widget/show_error.dart';
 import '../bloc_auth/auth_cubit.dart';
 
 class LoginPage extends StatelessWidget {
@@ -101,36 +101,48 @@ class LoginPage extends StatelessWidget {
                               height: 50.h,
                               // Use ScreenUtil for responsive height
                               child: ElevatedButton(
-                                  style: const ButtonStyle(
-                                      backgroundColor: WidgetStatePropertyAll(
-                                          Color(0xffd1d1d1))),
-                                  onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      context.read<AuthCubit>().login(
+                                style: const ButtonStyle(
+                                    backgroundColor: WidgetStatePropertyAll(
+                                        Color(0xffd1d1d1))),
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    context.read<AuthCubit>().login(
                                           numberController.text,
-                                          passwordController.text);
-                                      if (state is LoginSuccess) {
-                                        print("success");
+                                          passwordController.text,
+                                        );
+                                  }
+                                },
+                                child: BlocBuilder<AuthCubit, AuthState>(
+                                  builder: (context, state) {
+                                    if (state is LoginLoading) {
+                                      return const LoadingWidget();
+                                    } else if (state is LoginSuccess) {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((timeStamp) {
                                         Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const CityPage(),
-                                            ));
-                                      } else if (state is LoginFailure) {
-                                        print(state.message);
-                                      }
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const VerificationPage(),
+                                          ),
+                                        );
+                                      });
+                                    } else if (state is LoginFailure) {
+                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                        showErrorDialog(context, state.message);
+                                      });
                                     }
+                                    return Text(
+                                      "تسجيل الدخول",
+                                      style: TextStyle(
+                                        fontSize: ScreenUtil().setSp(18),
+                                        color: const Color(0xff0c3c6d),
+                                        fontFamily: 'changes',
+                                      ),
+                                    );
                                   },
-                                  child: state is LoginLoading
-                                      ? const LoadingWidget()
-                                      : Text(
-                                          "تسجيل الدخول",
-                                          style: TextStyle(
-                                              fontSize: ScreenUtil().setSp(18),
-                                              color: const Color(0xff0c3c6d),
-                                              fontFamily: 'changes'),
-                                        ))),
+                                ),
+                              )),
                         ),
                       ],
                     ))

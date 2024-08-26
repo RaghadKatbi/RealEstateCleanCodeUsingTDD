@@ -11,3 +11,7 @@ class OfflineFailure extends Failure{
   @override
   List<Object?> get props => [];
 }
+class DioFailure extends Failure{
+  @override
+  List<Object?> get props => [];
+}

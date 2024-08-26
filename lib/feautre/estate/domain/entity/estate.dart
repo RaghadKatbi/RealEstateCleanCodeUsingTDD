@@ -14,7 +14,7 @@ class Estate extends Equatable {
   final String? license;
   final String floor;
   final String description;
-  final String? numberShow;
+  final int? numberShow;
   final String? meterPrice;
   final String streetWidth;
   final String location;
@@ -24,7 +24,7 @@ class Estate extends Equatable {
   final String estateImage;
   final String estateVideo;
   final int? buildingRank;
-  final String? status;
+  final int? status;
   final DateTime createdAt;
   final DateTime updatedAt;
 

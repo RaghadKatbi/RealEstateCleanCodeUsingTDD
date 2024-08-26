@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:real_estate/core/constance/string.dart';
+import 'package:real_estate/feautre/contact_us/pesntation/bloc_contact/contact_us_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/widget/loading.dart';
 import '../../../../core/widget/my_textfield.dart';
+import '../../../../core/widget/show_error.dart';
 
 
 class ContactUs extends StatefulWidget {
@@ -128,13 +133,36 @@ class _ContactUsState extends State<ContactUs> {
                             backgroundColor:
                             WidgetStatePropertyAll(Color(0xffd1d1d1))),
                         onPressed: () {
-
+                          context.read<ContactUsCubit>().contactUs(
+                           name.text,
+                           phone.text,
+                           message.text
+                          );
                         },
-                        child: const Text(
-                          "إرسال",
-                          style: TextStyle(
-                              fontSize: 17, color: Color(0xff0c3c6d)),
-                        ))),
+                        child: BlocBuilder<ContactUsCubit, ContactUsState>(
+                          builder: (context, state) {
+                            if (state is ContactUsLoading) {
+                              return const LoadingWidget();
+                            } else if (state is ContactUsSuccess) {
+                              WidgetsBinding.instance
+                                  .addPostFrameCallback((timeStamp) {
+
+                              });
+                            } else if (state is ContactUsFailure) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                showErrorDialog(context, state.message);
+                              });
+                            }
+                            return Text(
+                              "ارسال",
+                              style: TextStyle(
+                                fontSize: ScreenUtil().setSp(18),
+                                color: const Color(0xff0c3c6d),
+                                fontFamily: 'changes',
+                              ),
+                            );
+                          },
+                        ),)),
                 Card(
                   elevation: 8,
                   margin: const EdgeInsets.all(18),
@@ -177,13 +205,14 @@ class _ContactUsState extends State<ContactUs> {
                             Column(
                               children: [
                                 const Text(
-                                 location,
+                                  location,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(fontFamily: 'change'),
                                 ),
                                 TextButton(
                                     onPressed: () async {
-                                      final Uri _url = Uri.parse(locationGoogleMap);
+                                      final Uri _url = Uri.parse(
+                                          locationGoogleMap);
                                       if (!await launchUrl(_url)) {
                                         throw Exception(
                                             'Could not launch $_url');

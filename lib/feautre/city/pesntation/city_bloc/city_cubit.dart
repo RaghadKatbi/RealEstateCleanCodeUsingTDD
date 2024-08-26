@@ -14,13 +14,7 @@ class CityCubit extends Cubit<CityState> {
 
   void getAllCity() async {
     emit(CityLoading());
-    final response = await getAllCities(CityModel(
-      id: null,
-      name: null,
-      createdAt: null,
-      updatedAt: null,
-      cityImage: null,
-    ));
+    final response = await getAllCities();
     response.fold(
       (failure) {
         emit(CityFailure(message: _mapFailureToMessage(failure)));

@@ -4,7 +4,6 @@ import 'package:real_estate/feautre/contact_us/data/datasources/data_Sources_Con
 import 'package:real_estate/feautre/contact_us/data/model/contact_model.dart';
 import 'package:real_estate/feautre/contact_us/domain/entity/contact.dart';
 import 'package:real_estate/feautre/contact_us/domain/repository/contact_repository.dart';
-
 import '../../../../core/network/network_info.dart';
 
 class ContactUsRepositoryImplement implements ContactRepository {
@@ -23,8 +22,13 @@ class ContactUsRepositoryImplement implements ContactRepository {
         updatedAt: contact.updatedAt,
         phone: contact.phone);
     if (await networkInfo.isConnected) {
-      final contact = await dataSourcesContactUsImplement.contactUs(contactModel);
-      return right(unit);
+       try {
+         await dataSourcesContactUsImplement.contactUs(contactModel);
+         return right(unit);
+       }
+       on ServerFailure catch(e){
+         throw Exception(e.toString());
+       }
     }
     else {
       return Left(OfflineFailure());

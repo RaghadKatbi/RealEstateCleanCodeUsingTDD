@@ -13,12 +13,16 @@ class CityRepositoryImplement implements CityRepository {
       {required this.cityRemoteDataSources, required this.networkInfo});
 
   @override
-  Future<Either<Failure, List<City>>> getAllCity(City city) async {
-    if(await networkInfo.isConnected){
-      final remoteCity= await cityRemoteDataSources.getAllCities();
+  Future<Either<Failure, List<City>>> getAllCity() async {
+    if (await networkInfo.isConnected) {
+    try{
+      final remoteCity = await cityRemoteDataSources.getAllCities();
       return right(remoteCity);
     }
-    else {
+     catch(e){
+      return left(ServerFailure());
+    }
+    } else {
       return Left(OfflineFailure());
     }
   }

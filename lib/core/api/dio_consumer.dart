@@ -1,8 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:real_estate/core/error/exptions.dart';
-
 import 'api_consumer.dart';
-import 'api_interceptors.dart';
 import 'end_ponits.dart';
 
 class DioConsumer extends ApiConsumer {
@@ -35,8 +32,8 @@ class DioConsumer extends ApiConsumer {
         queryParameters: queryParameters,
       );
       return response.data;
-    } on DioException {
-      throw ServerException();
+    } on DioException catch (e) {
+      throw Exception(e.type);
     }
   }
 
@@ -50,8 +47,8 @@ class DioConsumer extends ApiConsumer {
         queryParameters: queryParameters,
       );
       return response.data;
-    } on DioException {
-      throw ServerException();
+    } on DioException catch (e) {
+     throw Exception(e.type);
     }
   }
 
@@ -63,14 +60,14 @@ class DioConsumer extends ApiConsumer {
         bool isFromData = false,
       }) async {
     try {
-      final response = await dio.patch(
+    final response = await dio.patch(
         path,
         data: isFromData ? FormData.fromMap(data) : data,
         queryParameters: queryParameters,
       );
       return response.data;
-    } on DioException {
-      throw ServerException();
+    } on DioException catch (e) {
+      throw Exception(e.type);
     }
   }
 
@@ -88,8 +85,8 @@ class DioConsumer extends ApiConsumer {
         queryParameters: queryParameters,
       );
       return response.data;
-    } on DioException {
-      throw ServerException();
+    } on DioException catch (e) {
+      throw Exception(e.type);
     }
   }
 }

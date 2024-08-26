@@ -5,5 +5,5 @@ import '../../../../core/error/failer.dart';
 import '../entity/city.dart';
 
 abstract class CityRepository {
-  Future<Either<Failure, List<City>>> getAllCity(City city);
+  Future<Either<Failure, List<City>>> getAllCity();
 }

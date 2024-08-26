@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:real_estate/feautre/estate/pesntation/bloc_estate/estate_cubit.dart';
+import 'package:real_estate/my_bottom_nav.dart';
 
 class GridItem extends StatefulWidget {
   final String name, pathImage;
+
   const GridItem({super.key, required this.name, required this.pathImage});
 
   @override
@@ -22,7 +25,8 @@ class _GridItemState extends State<GridItem> with TickerProviderStateMixin {
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(_animationController);
+    _scaleAnimation =
+        Tween<double>(begin: 1.0, end: 1.1).animate(_animationController);
   }
 
   @override
@@ -40,13 +44,12 @@ class _GridItemState extends State<GridItem> with TickerProviderStateMixin {
       Future.delayed(const Duration(milliseconds: 300), () {
         _animationController.reverse();
       });
-
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final size=MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(10),
       child: MouseRegion(
@@ -54,10 +57,15 @@ class _GridItemState extends State<GridItem> with TickerProviderStateMixin {
         onEnter: (event) => _handleHover(true),
         //onExit: (_) => _handleHover(false),
         child: GestureDetector(
-          onLongPress:()=> _handleHover(isHovered),
+          onLongPress: () => _handleHover(isHovered),
           onTap: () {
             _handleHover(isHovered);
-            // Navigator.pushNamed(context, Constance.bottomNavigationBar);
+            context.read<EstateCubit>().getAllEstate(widget.name);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MyBottomNavigationBar(6, widget.name),
+                ));
           },
           child: AnimatedBuilder(
             animation: _animationController,
@@ -65,7 +73,7 @@ class _GridItemState extends State<GridItem> with TickerProviderStateMixin {
               return Transform.scale(
                 scale: _scaleAnimation.value,
                 child: SizedBox(
-                  width: size.width*0.25,
+                  width: size.width * 0.25,
                   height: 200,
                   child: Card(
                     shape: RoundedRectangleBorder(
@@ -82,12 +90,12 @@ class _GridItemState extends State<GridItem> with TickerProviderStateMixin {
                           ),
                           child: Image.network(
                             "https://proengaqar.com/img/city/${widget.pathImage}",
-                            height: size.height*0.12,
+                            height: size.height * 0.12,
                             width: double.infinity,
                             fit: BoxFit.cover,
                           ),
                         ),
-                         Padding(
+                        Padding(
                           padding: const EdgeInsets.only(left: 0.0),
                           child: Text(
                             widget.name,

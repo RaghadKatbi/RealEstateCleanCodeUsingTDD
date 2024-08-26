@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:real_estate/my_bottom_nav.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
@@ -17,18 +17,15 @@ class _MyDrawerState extends State<MyDrawer> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-        //  const SizedBox(height: 4),
           myAnimation(
             page: 0,
             icon: Icons.home,
             text: 'الرئيسية',
-            // isHovered: isHovered[0],
           ),
           myAnimation(
             page: 1,
             icon: Icons.add_home_work_outlined,
             text: 'اضف عقارك',
-            // isHovered: isHovered[0],
           ),
           myAnimation(
             page: 2,
@@ -36,7 +33,7 @@ class _MyDrawerState extends State<MyDrawer> {
             text: 'المفضلة',
             // isHovered: isHovered[0],
           ),
-         // const SizedBox(height: 6),
+          // const SizedBox(height: 6),
           myAnimation(
             page: 3,
             icon: Icons.info_outline,
@@ -50,7 +47,6 @@ class _MyDrawerState extends State<MyDrawer> {
             icon: Icons.phone,
             //isHovered: isHovered[2],
           ),
-
         ],
       ),
     );
@@ -65,7 +61,13 @@ class _MyDrawerState extends State<MyDrawer> {
       style: ButtonStyle(
         overlayColor: WidgetStateProperty.all<Color>(Colors.grey),
       ),
-      onPressed: () {},
+      onPressed: () {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MyBottomNavigationBar(page,""),
+            ));
+      },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -77,7 +79,7 @@ class _MyDrawerState extends State<MyDrawer> {
               color: Colors.white,
             ),
           ),
-           SizedBox(width: 10),
+          SizedBox(width: 10),
           Icon(
             icon,
             color: Colors.white,

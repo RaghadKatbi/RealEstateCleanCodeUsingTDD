@@ -4,13 +4,15 @@ class EndPoint {
   static String signIn = "auth/login";
   static String signUp = "auth/register";
   static String contactUs = "store_contact";
-  static String getByCity = "get_by_city/حلب";
   static String getByCityType = "get_by_city_type/شقة/حلب/ايجار";
+  static String getByCity(String nameCity){
+    return "get_by_city/$nameCity";
+  }
 }
 
 class ApiKey {
   static String status = "status";
-  static String errorMessage = "ErrorMessage";
+  static String errorMessage = "error";
   static String email = "email";
   static String password = "password";
   static String token = "token";

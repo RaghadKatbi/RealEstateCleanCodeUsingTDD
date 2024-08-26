@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:real_estate/core/error/exptions.dart';
 import 'package:real_estate/core/error/failer.dart';
 import 'package:real_estate/core/network/network_info.dart';
 import 'package:real_estate/feautre/user_estate/data/datasources/data_sources_user_estate.dart';
@@ -24,7 +23,9 @@ class UseEstateRepositoryImplement
     } else {
       Left(OfflineFailure());
     }
-    throw ServerException();
+
+    throw Exception();
+
   }
 
   @override
@@ -35,7 +36,7 @@ class UseEstateRepositoryImplement
     } else {
       Left(OfflineFailure());
     }
-    throw ServerException();
+    throw Exception();
   }
 
   @override
@@ -46,7 +47,7 @@ class UseEstateRepositoryImplement
     } else {
       Left(OfflineFailure());
     }
-    throw ServerException();
+    throw Exception();
   }
 
   @override
@@ -57,6 +58,6 @@ class UseEstateRepositoryImplement
     } else {
       Left(OfflineFailure());
     }
-    throw ServerException();
+    throw Exception();
   }
 }

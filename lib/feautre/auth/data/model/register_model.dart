@@ -2,21 +2,14 @@ import 'package:real_estate/feautre/auth/domain/entities/register.dart';
 
 class RegisterModel extends Register {
   const RegisterModel({
-    required String name,
-    required String phone,
-    required String updatedAt,
-    required String createdAt,
-    required int id,
-    required String password,
-    required String confirmPassword,
-  }) : super(
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            id: id,
-            phone: phone,
-            password: password,
-            name: name,
-            confirmPassword: confirmPassword);
+    required super.name,
+    required super.phone,
+    required super.updatedAt,
+    required super.createdAt,
+    required super.id,
+    required super.password,
+    required super.confirmPassword,
+  });
 
   factory RegisterModel.fromJson(Map<String, dynamic> json) {
     return RegisterModel(

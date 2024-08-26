@@ -22,8 +22,8 @@ class DataSourcesContactUsImplement implements DataSourcesContactUs {
         ApiKey.message:contact.message
       });
       return response[ApiKey.message];
-    } on ServerException {
-      throw ServerException();
+    } on ServerException catch (e) {
+      throw Exception(e);
     }
   }
 }

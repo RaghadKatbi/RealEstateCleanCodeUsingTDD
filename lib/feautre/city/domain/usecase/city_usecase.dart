@@ -9,8 +9,8 @@ class CityUseCase{
   CityRepository repository ;
   CityUseCase({required this.repository});
 
-  Future<Either<Failure, List<City>>> call ( City city )async{
-    return await repository.getAllCity(city);
+  Future<Either<Failure, List<City>>> call () async {
+    return await repository.getAllCity();
   }
 
 }
