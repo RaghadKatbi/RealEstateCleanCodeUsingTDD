@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-void showErrorDialog(BuildContext context, String errorMessage) {
+void showMessageDialog(BuildContext context, String Message,String title) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return Directionality(
         textDirection: TextDirection.rtl,
         child: AlertDialog(
-          title: const Text('خطأ', textAlign: TextAlign.right),
-          content: Text(errorMessage, textAlign: TextAlign.right),
+          title:  Text(title, textAlign: TextAlign.right),
+          content: Text(Message, textAlign: TextAlign.right),
           actions: <Widget>[
             TextButton(
               onPressed: () {

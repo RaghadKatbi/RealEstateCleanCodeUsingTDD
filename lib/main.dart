@@ -21,19 +21,31 @@ import 'package:real_estate/feautre/contact_us/pesntation/bloc_contact/contact_u
 import 'package:real_estate/feautre/estate/data/datasources/data_sources_estate.dart';
 import 'package:real_estate/feautre/estate/data/repsitory/estate_repository_implement.dart';
 import 'package:real_estate/feautre/estate/domain/usecase/get_all_estate_usecase.dart';
+import 'package:real_estate/feautre/estate/domain/usecase/get_filter_estate_by_type_usecase.dart';
 import 'package:real_estate/feautre/estate/pesntation/bloc_estate/estate_cubit.dart';
+import 'package:real_estate/feautre/user_estate/data/datasources/data_sources_user_estate.dart';
+import 'package:real_estate/feautre/user_estate/data/repository/use_estate_repository_implement.dart';
+import 'package:real_estate/feautre/user_estate/domain/usecase/add_my_estate_use_case.dart';
+import 'package:real_estate/feautre/user_estate/pesntation/bloc_user_estate/user_estate_cubit.dart';
 import 'package:real_estate/my_bottom_nav.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'core/constance/string.dart';
 import 'core/my_them/mythem.dart';
 import 'feautre/city/data/repository/city_repository_implement.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 
+import 'feautre/user_estate/domain/repository/estate_added_and_favorite_by_user_repository.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String token = prefs.getString('token') ?? '';
-  runApp(
-    MultiBlocProvider(
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
       providers: [
         BlocProvider<AuthCubit>(
           create: (_) => AuthCubit(
@@ -74,6 +86,19 @@ void main() async {
                   repository: EstateRepositoryImplement(
                       networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
                       dataSourcesEstate: DataSourcesEstateImplement(
+                          api: DioConsumer(dio: Dio())))),
+              getFilterEstateByType: GetFilterEstateByTypeUseCase(
+                  repository: EstateRepositoryImplement(
+                      networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
+                      dataSourcesEstate: DataSourcesEstateImplement(
+                          api: DioConsumer(dio: Dio()))))),
+        ),
+        BlocProvider(
+          create: (_) => UserEstateCubit(
+              addMyEstateUseCase: AddMyEstateUseCase(
+                  repository: UserEstateRepositoryImplement(
+                      networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
+                      dataSourcesUserEstate: DataSourcesUserEstateImplement(
                           api: DioConsumer(dio: Dio()))))),
         )
       ],
@@ -85,12 +110,12 @@ void main() async {
               splashIconSize: 200,
               duration: 3000,
               splash: Image.asset("asset/images/Artboard.png"),
-              nextScreen: token == ""
+              nextScreen: getToken == ""
                   ? LoginPage()
                   : const MyBottomNavigationBar(0, "A"),
               curve: Curves.linear,
               splashTransition: SplashTransition.scaleTransition,
               backgroundColor: const Color(0xf0d0dae6))),
-    ),
-  );
+    );
+  }
 }

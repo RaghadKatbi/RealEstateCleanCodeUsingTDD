@@ -4,12 +4,14 @@ import 'package:meta/meta.dart';
 import '../../../../core/error/failer.dart';
 import '../../domain/entity/estate.dart';
 import '../../domain/usecase/get_all_estate_usecase.dart';
+import '../../domain/usecase/get_filter_estate_by_type_usecase.dart';
 
 part 'estate_state.dart';
 
 class EstateCubit extends Cubit<EstateState> {
   final GetAllEstateUseCase getAllEstate;
-  EstateCubit({required this.getAllEstate}) : super(EstateInitial());
+  final GetFilterEstateByTypeUseCase getFilterEstateByType;
+  EstateCubit({required this.getFilterEstateByType,required this.getAllEstate}) : super(EstateInitial());
   void getByCity(String nameCity) async {
     emit(EstateLoading());
     final response = await getAllEstate(nameCity);

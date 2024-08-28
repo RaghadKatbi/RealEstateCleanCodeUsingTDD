@@ -4,7 +4,7 @@ import 'package:real_estate/feautre/user_estate/domain/entity/estate_added_by_us
 import 'package:real_estate/feautre/user_estate/domain/entity/favorite_estate.dart';
 
 abstract class EstateAddedAndFavoriteByUserRepository {
-  Future<Either<Failure, Unit>> addedEstate();
+  Future<Either<Failure, Unit>> addedEstate(EstateAddedByUser estate);
 
   Future<Either<Failure, List<EstateAddedByUser>>> getAllEstateAddedByUser();
 

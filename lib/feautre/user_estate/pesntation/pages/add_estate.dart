@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:real_estate/feautre/user_estate/pesntation/bloc_user_estate/user_estate_cubit.dart';
+import '../../../../core/widget/loading.dart';
 import '../../../../core/widget/my_textfield.dart';
-
+import '../../../../core/widget/show_message.dart';
 
 class AddRealEstate extends StatefulWidget {
   const AddRealEstate({super.key});
@@ -24,7 +25,6 @@ class _AddRealEstateState extends State<AddRealEstate> {
   Map<String, List<String>> regions = {
     'دمشق': ["ميدان", "الشاغور", "المزة", "الميدان", "المزرعة"],
     'حلب': ["الفردوس", "الزهراء", "الشيخ مقصود", "السكري", "الصاخور"]
-
   };
 
   @override
@@ -253,7 +253,8 @@ class _AddRealEstateState extends State<AddRealEstate> {
                     textAlign: TextAlign.right,
                   ),
                 ),
-                style: const TextStyle(fontFamily: 'cairo', color: Colors.black),
+                style:
+                    const TextStyle(fontFamily: 'cairo', color: Colors.black),
                 underline: Container(),
                 icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
                 items: regions.keys.map((String city) {
@@ -264,13 +265,15 @@ class _AddRealEstateState extends State<AddRealEstate> {
                         borderRadius: BorderRadius.circular(25),
                         color: Colors.blueGrey.shade50,
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
                       child: SizedBox(
                         width: double.infinity,
                         child: Text(
                           city,
                           textAlign: TextAlign.right,
-                          style: const TextStyle(fontFamily: 'cairo', color: Colors.black),
+                          style: const TextStyle(
+                              fontFamily: 'cairo', color: Colors.black),
                         ),
                       ),
                     ),
@@ -298,17 +301,18 @@ class _AddRealEstateState extends State<AddRealEstate> {
                     textAlign: TextAlign.right,
                   ),
                 ),
-                style: const TextStyle(fontFamily: 'cairo', color: Colors.black),
+                style:
+                    const TextStyle(fontFamily: 'cairo', color: Colors.black),
                 underline: Container(),
                 icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
                 items: selectedCity.isEmpty
                     ? []
                     : regions[selectedCity]!.map((String region) {
-                  return DropdownMenuItem<String>(
-                    value: region,
-                    child: Text(region),
-                  );
-                }).toList(),
+                        return DropdownMenuItem<String>(
+                          value: region,
+                          child: Text(region),
+                        );
+                      }).toList(),
                 onChanged: (value) {
                   setState(() {
                     selectedRegion = value!;
@@ -324,10 +328,14 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 value: selectedCity.isEmpty ? null : selectedCity,
                 hint: const SizedBox(
                   width: double.infinity,
-                  child: Text('اختر حي',
-                    style: TextStyle(fontFamily: 'cairo', color: Colors.grey),textAlign: TextAlign.right,),
+                  child: Text(
+                    'اختر حي',
+                    style: TextStyle(fontFamily: 'cairo', color: Colors.grey),
+                    textAlign: TextAlign.right,
+                  ),
                 ),
-                style: const TextStyle(fontFamily: 'cairo', color: Colors.black),
+                style:
+                    const TextStyle(fontFamily: 'cairo', color: Colors.black),
                 underline: Container(),
                 icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
                 items: regions.keys.map((String city) {
@@ -338,7 +346,8 @@ class _AddRealEstateState extends State<AddRealEstate> {
                         borderRadius: BorderRadius.circular(25),
                         color: Colors.blueGrey.shade50,
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
                       child: SizedBox(
                         width: double.infinity,
                         child: Text(
@@ -364,27 +373,40 @@ class _AddRealEstateState extends State<AddRealEstate> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
-                  width: ScreenUtil().setWidth(150),
-                  height: ScreenUtil().setHeight(50),
-                  child: ElevatedButton(
-                    style: const ButtonStyle(
-                      backgroundColor:
-                      WidgetStatePropertyAll(Color(0xffd1d1d1)),
-                    ),
-                    onPressed: () {
-
-                      Navigator.pop(context);
-
-
+                  width: 150,
+                  height: 50,
+                  child: BlocBuilder<UserEstateCubit, UserEstateState>(
+                    builder: (context, state) {
+                      if (state is UserEstateLoadingMyAddEstate) {
+                        return const LoadingWidget();
+                      } else if (state is UserEstateSuccessMyAddEstate) {
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((timeStamp) {
+                          showMessageDialog(
+                              context, "تم ارسال طلبك بنجاح", "نجاح");
+                        });
+                        return Text(
+                          "ارسال",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: const Color(0xff0c3c6d),
+                            fontFamily: 'changes',
+                          ),
+                        );
+                      } else if (state is UserEstateFailureMyAddEstate) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          showMessageDialog(context, "error", "خطأ");
+                        });
+                      }
+                      return Text(
+                        "ارسال",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: const Color(0xff0c3c6d),
+                          fontFamily: 'changes',
+                        ),
+                      );
                     },
-                    child: const Text(
-                      "إرسال",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Color(0xff0c3c6d),
-                        fontFamily: 'changes',
-                      ),
-                    ),
                   ),
                 ),
               ),

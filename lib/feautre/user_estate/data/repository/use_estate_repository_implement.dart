@@ -2,37 +2,64 @@ import 'package:dartz/dartz.dart';
 import 'package:real_estate/core/error/failer.dart';
 import 'package:real_estate/core/network/network_info.dart';
 import 'package:real_estate/feautre/user_estate/data/datasources/data_sources_user_estate.dart';
+import 'package:real_estate/feautre/user_estate/data/model/estate_added_by_user_model.dart';
 import 'package:real_estate/feautre/user_estate/domain/entity/estate_added_by_user.dart';
 import 'package:real_estate/feautre/user_estate/domain/entity/favorite_estate.dart';
 import 'package:real_estate/feautre/user_estate/domain/repository/estate_added_and_favorite_by_user_repository.dart';
 
-class UseEstateRepositoryImplement
+class UserEstateRepositoryImplement
     implements EstateAddedAndFavoriteByUserRepository {
   final DataSourcesUserEstate dataSourcesUserEstate;
 
   final NetworkInfo networkInfo;
 
-  UseEstateRepositoryImplement(
+  UserEstateRepositoryImplement(
       {required this.dataSourcesUserEstate, required this.networkInfo});
 
   @override
-  Future<Either<Failure, Unit>> addedEstate() async {
+  Future<Either<Failure, Unit>> addedEstate(EstateAddedByUser estate) async {
+    final EstateAddedByUserModel estateModel = EstateAddedByUserModel(
+        image: estate.image,
+        video: estate.video,
+        id: estate.id,
+        propertyType: estate.propertyType,
+        propertyPurpose: estate.propertyPurpose,
+        rooms: estate.rooms,
+        bathrooms: estate.bathrooms,
+        price: estate.price,
+        condition: estate.condition,
+        space: estate.space,
+        direction: estate.direction,
+        license: estate.license,
+        floor: estate.floor,
+        description: estate.description,
+        meterPrice: estate.meterPrice,
+        streetWidth: estate.streetWidth,
+        location: estate.location,
+        features: estate.features,
+        neighborhoodId: estate.neighborhoodId,
+        userId: estate.userId,
+        buildingRank: estate.buildingRank,
+        status: estate.status,
+        note: estate.note,
+        updatedAt: estate.updatedAt,
+        createdAt: estate.createdAt);
     if (await networkInfo.isConnected) {
-      final response = await dataSourcesUserEstate.addedEstate();
+      final response = await dataSourcesUserEstate.addedEstate(estateModel);
       return const Right(unit);
     } else {
       Left(OfflineFailure());
     }
 
     throw Exception();
-
   }
 
   @override
-  Future<Either<Failure, List<EstateAddedByUser>>> getAllEstateAddedByUser() async {
+  Future<Either<Failure,
+      List<EstateAddedByUser>>> getAllEstateAddedByUser() async {
     if (await networkInfo.isConnected) {
       final response = await dataSourcesUserEstate.getAllEstateAddedByUser();
-      return  Right(response as List<EstateAddedByUser>);
+      return Right(response as List<EstateAddedByUser>);
     } else {
       Left(OfflineFailure());
     }
@@ -43,7 +70,7 @@ class UseEstateRepositoryImplement
   Future<Either<Failure, List<FavoriteEstate>>> getAllEstateFavorite() async {
     if (await networkInfo.isConnected) {
       final response = await dataSourcesUserEstate.getAllEstateFavorite();
-      return  Right(response as List<FavoriteEstate>);
+      return Right(response as List<FavoriteEstate>);
     } else {
       Left(OfflineFailure());
     }
@@ -54,7 +81,7 @@ class UseEstateRepositoryImplement
   Future<Either<Failure, Unit>> setFavoriteAndUnset(int idEstate) async {
     if (await networkInfo.isConnected) {
       final response = await dataSourcesUserEstate.getAllEstateFavorite();
-      return  const Right(unit);
+      return const Right(unit);
     } else {
       Left(OfflineFailure());
     }

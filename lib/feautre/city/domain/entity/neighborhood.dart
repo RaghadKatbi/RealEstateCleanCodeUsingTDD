@@ -5,8 +5,8 @@ class Neighborhood extends Equatable {
   final int id;
   final String name;
   final int regionId;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final String createdAt;
+  final String updatedAt;
 
   const Neighborhood({
     required this.id,

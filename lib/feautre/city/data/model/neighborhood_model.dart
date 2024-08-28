@@ -13,7 +13,7 @@ class NeighborhoodModel extends Neighborhood {
         id: json['id'],
         name: json['name'],
         regionId: json['region_id'],
-        createdAt: json['created_id'],
-        updatedAt: json['updated_id']);
+        createdAt: json['created_at'],
+        updatedAt: json['updated_at']);
   }
 }

@@ -60,7 +60,7 @@ class _GridItemState extends State<GridItem> with TickerProviderStateMixin {
           onLongPress: () => _handleHover(isHovered),
           onTap: () {
             _handleHover(isHovered);
-            context.read<EstateCubit>().getAllEstate(widget.name);
+           context.read<EstateCubit>().getByCity(widget.name);
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(

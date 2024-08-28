@@ -4,26 +4,32 @@ import 'package:dartz/dartz.dart';
 import 'package:real_estate/feautre/contact_us/data/model/contact_model.dart';
 import 'package:real_estate/feautre/contact_us/domain/usecase/contact_usecase.dart';
 import '../../../../core/error/failer.dart';
-part 'contact_us_state.dart';
 
+part 'contact_us_state.dart';
 
 class ContactUsCubit extends Cubit<ContactUsState> {
   final ContactUseCase contactUsUseCase;
 
   ContactUsCubit({required this.contactUsUseCase}) : super(ContactUsInitial());
 
-  void contactUs(String name, String phone, String message) {
+  void contactUs(String name, String phone, String message) async {
     emit(ContactUsLoading());
-    final response = contactUsUseCase(ContactModel(
+    final contactModel = ContactModel(
         id: 0,
         name: name,
         message: message,
         createdAt: "createdAt",
         updatedAt: "updatedAt",
-        phone: phone));
-      print(response);
-      emit(ContactUsFailure(message: _mapFailureToMessage(response.toString() as Failure)));
+        phone: phone);
+    final response = await contactUsUseCase(contactModel);
+    print(response);
+    response.fold(
+      (l) => emit(ContactUsFailure(
+          message: _mapFailureToMessage(response.toString() as Failure))),
+      (r) => emit(ContactUsSuccess()),
+    );
   }
+
   String _mapFailureToMessage(Failure failure) {
     switch (failure.runtimeType) {
       case ServerFailure:

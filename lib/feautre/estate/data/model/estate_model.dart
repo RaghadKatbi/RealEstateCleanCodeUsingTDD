@@ -1,3 +1,5 @@
+import 'package:real_estate/feautre/city/data/model/neighborhood_model.dart';
+import 'package:real_estate/feautre/city/domain/entity/neighborhood.dart';
 import 'package:real_estate/feautre/estate/domain/entity/estate.dart';
 
 class EstateModel extends Estate {
@@ -26,35 +28,38 @@ class EstateModel extends Estate {
       required super.meterPrice,
       required super.numberShow,
       required super.status,
-      required super.userId});
+      required super.userId,
+      required super.neighborhood});
 
   factory EstateModel.fromJson(Map<String, dynamic> json) {
     return EstateModel(
       id: json['id'] ?? 0,
       type: json['type'] ?? "",
       purpose: json['purpose'] ?? "",
-      rooms: json['room'] != null ? json['room'] : 0,
+      rooms: json['room'] ,
       bathrooms: json['bathroom'] != null ? json['bathroom'] : 0,
       price: json['price'] ?? "",
       state: json['state'] ?? "",
       space: json['space'] ?? "",
       direction: json['direction'] ?? "",
-      floor: json['floor'] != null ? json['floor'] : 0,
+      floor: json['floor'] != null ? json['floor'] : "",
       description: json['description'] ?? "",
       streetWidth: json['street_width'] ?? "",
       location: json['location'] ?? "",
       features: json['features'] ?? "",
-      neighborhoodId: json['neighborhood_id'] != null ? json['neighborhood_id'] : 0,
+      neighborhoodId:
+          json['neighborhood_id'] != null ? json['neighborhood_id'] : 0,
       estateImage: json['estate_image'] ?? "",
       estateVideo: json['estate_video'] ?? "",
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : DateTime.now(),
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : DateTime.now(),
+      createdAt: json['created_at'] ,
+      updatedAt: json['updated_at'],
       buildingRank: json['building_rank'] != null ? json['building_rank'] : 0,
       license: json['license'] ?? "",
       meterPrice: json['meter_price'] != null ? json['meter_price'] : "",
-      numberShow: json['number_show'] != null ? json['number_show'] : "",
-      status: json['status_'] != null ? json['status_'] : 0,
+      numberShow: json['number_show'] != null ? json['number_show'] : 0,
+      status: json['status_'] != null ? json['status_'] : "",
       userId: json['user_id'] != null ? json['user_id'] : 0,
+      neighborhood: NeighborhoodModel.fromJson(json['neighborhood']),
     );
   }
 }

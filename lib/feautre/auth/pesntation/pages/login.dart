@@ -5,7 +5,7 @@ import 'package:real_estate/core/widget/loading.dart';
 import 'package:real_estate/feautre/auth/pesntation/pages/register.dart';
 import 'package:real_estate/feautre/auth/pesntation/pages/verification.dart';
 import '../../../../core/widget/my_textfield.dart';
-import '../../../../core/widget/show_error.dart';
+import '../../../../core/widget/show_message.dart';
 import '../bloc_auth/auth_cubit.dart';
 
 class LoginPage extends StatelessWidget {
@@ -129,7 +129,7 @@ class LoginPage extends StatelessWidget {
                                       });
                                     } else if (state is LoginFailure) {
                                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                                        showErrorDialog(context, state.message);
+                                        showMessageDialog(context, state.message,"خطأ");
                                       });
                                     }
                                     return Text(

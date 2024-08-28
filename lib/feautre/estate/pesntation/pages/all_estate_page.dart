@@ -71,7 +71,6 @@ class _AllEstatePageState extends State<AllEstatePage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        //appBar: MyCustomAppBar(preferredHeight: 100,),
         body: Column(
           children: [
             const HeaderScreen(),
@@ -146,6 +145,7 @@ class _AllEstatePageState extends State<AllEstatePage>
                         child: AnimatedBuilder(
                             animation: _animationController,
                             builder: (context, child) {
+                              print(state.estate);
                               return Transform.scale(
                                   scale: _scaleAnimation.value,
                                   child: Card(
@@ -169,7 +169,7 @@ class _AllEstatePageState extends State<AllEstatePage>
                                                                 15)),
                                                 clipBehavior: Clip.antiAlias,
                                                 child: Image.network(
-                                                  state.estate[index].estateImage,
+                                                 "https://proengaqar.com/img/estate/${state.estate[index].estateImage}",
                                                   height: 200,
                                                   width: double.infinity,
                                                   fit: BoxFit.cover,
@@ -358,7 +358,6 @@ class _AllEstatePageState extends State<AllEstatePage>
             )
           ],
         ),
-        //bottomNavigationBar: const MyBottomNavigationBar(),
       ),
     );
   }
@@ -387,8 +386,7 @@ class _AllEstatePageState extends State<AllEstatePage>
                       color: Colors.white, fontFamily: 'changes', fontSize: 25),
                 ),
                 onPressed: () {
-                  // تنفيذ الإجراء المطلوب عند النقر على "شقة"
-                  Navigator.pop(context); // إغلاق BottomSheet بعد النقر
+                  Navigator.pop(context);
                 },
               ),
               TextButton(
@@ -401,8 +399,7 @@ class _AllEstatePageState extends State<AllEstatePage>
                       color: Colors.white, fontFamily: 'changes', fontSize: 25),
                 ),
                 onPressed: () {
-                  // تنفيذ الإجراء المطلوب عند النقر على "إيجار"
-                  Navigator.pop(context); // إغلاق BottomSheet بعد النقر
+                  Navigator.pop(context);
                 },
               ),
               TextButton(
@@ -415,8 +412,7 @@ class _AllEstatePageState extends State<AllEstatePage>
                       color: Colors.white, fontFamily: 'changes', fontSize: 25),
                 ),
                 onPressed: () {
-                  // تنفيذ الإجراء المطلوب عند النقر على "رهن"
-                  Navigator.pop(context); // إغلاق BottomSheet بعد النقر
+                  Navigator.pop(context);
                 },
               ),
             ],
