@@ -1,9 +1,15 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:real_estate/feautre/user_estate/pesntation/bloc_user_estate/user_estate_cubit.dart';
+import 'package:video_player/video_player.dart';
 import '../../../../core/widget/loading.dart';
 import '../../../../core/widget/my_textfield.dart';
 import '../../../../core/widget/show_message.dart';
+import '../../data/model/estate_added_by_user_model.dart';
 
 class AddRealEstate extends StatefulWidget {
   const AddRealEstate({super.key});
@@ -18,7 +24,28 @@ class _AddRealEstateState extends State<AddRealEstate> {
     TextEditingController(),
     TextEditingController(),
     TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
   ];
+  bool isVideo = false;
+
+  VideoPlayerController? _controller;
+  VideoPlayerController? _toBeDisposed;
+  late XFile video, image;
+  final ImagePicker _picker = ImagePicker();
+  final TextEditingController maxWidthController = TextEditingController();
+  final TextEditingController maxHeightController = TextEditingController();
+  final TextEditingController qualityController = TextEditingController();
+  final TextEditingController limitController = TextEditingController();
   String selectedCity = '';
   String selectedRegion = '';
   List<String> neighborhoods = [];
@@ -26,6 +53,22 @@ class _AddRealEstateState extends State<AddRealEstate> {
     'دمشق': ["ميدان", "الشاغور", "المزة", "الميدان", "المزرعة"],
     'حلب': ["الفردوس", "الزهراء", "الشيخ مقصود", "السكري", "الصاخور"]
   };
+
+  Future<void> _disposeVideoController() async {
+    if (_toBeDisposed != null) {
+      await _toBeDisposed!.dispose();
+    }
+    _toBeDisposed = _controller;
+    _controller = null;
+  }
+
+  void dispose() {
+    _disposeVideoController();
+    maxWidthController.dispose();
+    maxHeightController.dispose();
+    qualityController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +135,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 textInputType: TextInputType.number,
                 maxLine: 1,
                 maxLength: 6,
-                textEditingController: _textControllers[0],
+                textEditingController: _textControllers[3],
                 enable: false,
                 validator: (value) => null,
               ),
@@ -105,7 +148,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 textInputType: TextInputType.text,
                 maxLine: 1,
                 maxLength: 6,
-                textEditingController: _textControllers[3],
+                textEditingController: _textControllers[4],
                 enable: false,
                 validator: (value) => null,
               ),
@@ -118,7 +161,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 textInputType: TextInputType.text,
                 maxLine: 1,
                 maxLength: 6,
-                textEditingController: _textControllers[0],
+                textEditingController: _textControllers[5],
                 enable: false,
                 validator: (value) => null,
               ),
@@ -131,7 +174,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 textInputType: TextInputType.number,
                 maxLine: 1,
                 maxLength: 6,
-                textEditingController: _textControllers[0],
+                textEditingController: _textControllers[6],
                 enable: false,
                 validator: (value) => null,
               ),
@@ -144,7 +187,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 textInputType: TextInputType.text,
                 maxLine: 1,
                 maxLength: 6,
-                textEditingController: _textControllers[0],
+                textEditingController: _textControllers[7],
                 enable: false,
                 validator: (value) => null,
               ),
@@ -157,7 +200,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 textInputType: TextInputType.text,
                 maxLine: 1,
                 maxLength: 6,
-                textEditingController: _textControllers[0],
+                textEditingController: _textControllers[8],
                 enable: false,
                 validator: (value) => null,
               ),
@@ -170,7 +213,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 textInputType: TextInputType.number,
                 maxLine: 1,
                 maxLength: 6,
-                textEditingController: _textControllers[0],
+                textEditingController: _textControllers[9],
                 enable: false,
                 validator: (value) => null,
               ),
@@ -183,7 +226,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 textInputType: TextInputType.text,
                 maxLine: 1,
                 maxLength: 6,
-                textEditingController: _textControllers[0],
+                textEditingController: _textControllers[10],
                 enable: false,
                 validator: (value) => null,
               ),
@@ -196,7 +239,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 textInputType: TextInputType.number,
                 maxLine: 1,
                 maxLength: 6,
-                textEditingController: _textControllers[0],
+                textEditingController: _textControllers[11],
                 enable: false,
                 validator: (value) => null,
               ),
@@ -209,7 +252,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 textInputType: TextInputType.text,
                 maxLine: 1,
                 maxLength: 6,
-                textEditingController: _textControllers[0],
+                textEditingController: _textControllers[12],
                 enable: false,
                 validator: (value) => null,
               ),
@@ -222,7 +265,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 textInputType: TextInputType.text,
                 maxLine: 1,
                 maxLength: 6,
-                textEditingController: _textControllers[0],
+                textEditingController: _textControllers[13],
                 enable: false,
                 validator: (value) => null,
               ),
@@ -235,7 +278,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 textInputType: TextInputType.text,
                 maxLine: 1,
                 maxLength: 6,
-                textEditingController: _textControllers[0],
+                textEditingController: _textControllers[14],
                 enable: false,
                 validator: (value) => null,
               ),
@@ -369,51 +412,157 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 },
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      isVideo = false;
+                      _onImageButtonPressed(ImageSource.gallery,
+                          context: context);
+                    },
+                    child: Text("Choose photo")),
+                ElevatedButton(
+                    onPressed: () {
+                      isVideo = true;
+                      _onImageButtonPressed(ImageSource.gallery,
+                          context: context);
+                    },
+                    child: Text("Choose video")),
+              ],
+            ),
             Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
-                  width: 150,
-                  height: 50,
-                  child: BlocBuilder<UserEstateCubit, UserEstateState>(
-                    builder: (context, state) {
-                      if (state is UserEstateLoadingMyAddEstate) {
-                        return const LoadingWidget();
-                      } else if (state is UserEstateSuccessMyAddEstate) {
-                        WidgetsBinding.instance
-                            .addPostFrameCallback((timeStamp) {
-                          showMessageDialog(
-                              context, "تم ارسال طلبك بنجاح", "نجاح");
-                        });
-                        return Text(
-                          "ارسال",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: const Color(0xff0c3c6d),
-                            fontFamily: 'changes',
+                    width: 150,
+                    height: 50,
+                    child: SizedBox(
+                        width: 180,
+                        // Use ScreenUtil for responsive width
+                        height: 50,
+                        // Use ScreenUtil for responsive height
+                        child: ElevatedButton(
+                          style: const ButtonStyle(
+                              backgroundColor:
+                                  WidgetStatePropertyAll(Color(0xffd1d1d1))),
+                          onPressed: () {
+                            // if (_formKey.currentState!.validate()) {
+                            final EstateAddedByUserModel estateAddedByUser =
+                                EstateAddedByUserModel(
+                                    image: "image",
+                                    video: "video",
+                                    id: 0,
+                                    propertyType: _textControllers[0].text,
+                                    propertyPurpose: _textControllers[1].text,
+                                    rooms: int.parse(_textControllers[3].text),
+                                    bathrooms:
+                                        int.parse(_textControllers[4].text),
+                                    price: _textControllers[5].text,
+                                    space: _textControllers[7].text,
+                                    direction: _textControllers[8].text,
+                                    license: _textControllers[6].text,
+                                    floor: _textControllers[9].text,
+                                    description: _textControllers[10].text,
+                                    meterPrice: _textControllers[11].text,
+                                    streetWidth: _textControllers[12].text,
+                                    location: _textControllers[13].text,
+                                    features: "_textControllers[14].text",
+                                    neighborhoodId: 1,
+                                    userId: 1,
+                                    buildingRank: 0,
+                                    status: "",
+                                    note: "",
+                                    updatedAt: "",
+                                    createdAt: "",
+                                    reason: 0,
+                                    detaillsAddress: '');
+                            context
+                                .read<UserEstateCubit>()
+                                .addMyEstate(estateAddedByUser);
+                            // }
+                          },
+                          child: BlocBuilder<UserEstateCubit, UserEstateState>(
+                            builder: (context, state) {
+                              if (state is UserEstateLoadingMyAddEstate) {
+                                return const LoadingWidget();
+                              } else if (state
+                                  is UserEstateSuccessMyAddEstate) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((timeStamp) {});
+                              } else if (state
+                                  is UserEstateFailureMyAddEstate) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  showMessageDialog(
+                                      context, state.message, "خطأ");
+                                });
+                              }
+                              return Text(
+                                "ارسال",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: const Color(0xff0c3c6d),
+                                  fontFamily: 'changes',
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      } else if (state is UserEstateFailureMyAddEstate) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          showMessageDialog(context, "error", "خطأ");
-                        });
-                      }
-                      return Text(
-                        "ارسال",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: const Color(0xff0c3c6d),
-                          fontFamily: 'changes',
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                        ))),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _playVideo(XFile? file) async {
+    if (file != null && mounted) {
+      await _disposeVideoController();
+      late VideoPlayerController controller;
+      if (kIsWeb) {
+        controller = VideoPlayerController.networkUrl(Uri.parse(file.path));
+      } else {
+        controller = VideoPlayerController.file(File(file.path));
+      }
+      _controller = controller;
+      await controller.initialize();
+      await controller.setLooping(true);
+      await controller.play();
+      setState(() {});
+    }
+  }
+
+  Future<void> _onImageButtonPressed(
+    ImageSource source, {
+    required BuildContext context,
+  }) async {
+    if (_controller != null) {
+      await _controller!.setVolume(0.0);
+    }
+    if (context.mounted) {
+      if (isVideo) {
+        final XFile? file = await _picker.pickVideo(
+            source: source, maxDuration: const Duration(seconds: 10));
+        await _playVideo(file);
+        video = file!;
+      } else {
+        final XFile? file = await _picker.pickImage(
+          source: source,
+        );
+        image = file!;
+      }
+    }
+    return null;
+  }
+
+  @override
+  void deactivate() {
+    if (_controller != null) {
+      _controller!.setVolume(0.0);
+      _controller!.pause();
+    }
+    super.deactivate();
   }
 }

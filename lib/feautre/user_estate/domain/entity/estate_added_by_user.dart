@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EstateAddedByUser extends Equatable {
   final int id;
@@ -6,15 +7,14 @@ class EstateAddedByUser extends Equatable {
   final String propertyPurpose;
   final int rooms;
   final int bathrooms;
-  final double price;
-  final String condition;
-  final double space;
+  final String price;
+  final String space;
   final String direction;
   final String license;
-  final int floor;
+  final String floor;
   final String description;
-  final double meterPrice;
-  final double streetWidth;
+  final String meterPrice;
+  final String streetWidth;
   final String location;
   final String features;
   final int neighborhoodId;
@@ -24,10 +24,14 @@ class EstateAddedByUser extends Equatable {
   final String note;
   final String updatedAt;
   final String createdAt;
-  final String? image;
+  final String image;
   final String video;
+  final int? reason;
+  final String? detaillsAddress;
 
   const EstateAddedByUser({
+    required this.detaillsAddress,
+    required this.reason,
     required this.image,
     required this.video,
     required this.id,
@@ -36,7 +40,6 @@ class EstateAddedByUser extends Equatable {
     required this.rooms,
     required this.bathrooms,
     required this.price,
-    required this.condition,
     required this.space,
     required this.direction,
     required this.license,
@@ -63,7 +66,6 @@ class EstateAddedByUser extends Equatable {
         rooms,
         bathrooms,
         price,
-        condition,
         space,
         direction,
         license,

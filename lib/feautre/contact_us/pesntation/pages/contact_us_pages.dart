@@ -120,6 +120,9 @@ class _ContactUsState extends State<ContactUs> {
                             if (!value.contains(RegExp(r'^[0-9]+$'))) {
                               return 'رقم الهاتف يجب أن يحتوي على أرقام فقط';
                             }
+                            if (value.length < 10) {
+                              return 'رقم الهاتف يجب ان يتكون من 10 ارقام';
+                            }
                             return null;
                           }),
                     ),

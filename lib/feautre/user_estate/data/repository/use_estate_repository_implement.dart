@@ -27,7 +27,6 @@ class UserEstateRepositoryImplement
         rooms: estate.rooms,
         bathrooms: estate.bathrooms,
         price: estate.price,
-        condition: estate.condition,
         space: estate.space,
         direction: estate.direction,
         license: estate.license,
@@ -43,9 +42,10 @@ class UserEstateRepositoryImplement
         status: estate.status,
         note: estate.note,
         updatedAt: estate.updatedAt,
-        createdAt: estate.createdAt);
+        createdAt: estate.createdAt,
+        reason: 0, detaillsAddress: '');
     if (await networkInfo.isConnected) {
-      final response = await dataSourcesUserEstate.addedEstate(estateModel);
+      await dataSourcesUserEstate.addedEstate(estateModel);
       return const Right(unit);
     } else {
       Left(OfflineFailure());
@@ -55,11 +55,11 @@ class UserEstateRepositoryImplement
   }
 
   @override
-  Future<Either<Failure,
-      List<EstateAddedByUser>>> getAllEstateAddedByUser() async {
+  Future<Either<Failure, List<EstateAddedByUser>>>
+      getAllEstateAddedByUser() async {
     if (await networkInfo.isConnected) {
       final response = await dataSourcesUserEstate.getAllEstateAddedByUser();
-      return Right(response as List<EstateAddedByUser>);
+      return Right(response);
     } else {
       Left(OfflineFailure());
     }
@@ -70,7 +70,7 @@ class UserEstateRepositoryImplement
   Future<Either<Failure, List<FavoriteEstate>>> getAllEstateFavorite() async {
     if (await networkInfo.isConnected) {
       final response = await dataSourcesUserEstate.getAllEstateFavorite();
-      return Right(response as List<FavoriteEstate>);
+      return Right(response);
     } else {
       Left(OfflineFailure());
     }
@@ -80,7 +80,7 @@ class UserEstateRepositoryImplement
   @override
   Future<Either<Failure, Unit>> setFavoriteAndUnset(int idEstate) async {
     if (await networkInfo.isConnected) {
-      final response = await dataSourcesUserEstate.getAllEstateFavorite();
+      await dataSourcesUserEstate.setFavoriteAndUnset(idEstate);
       return const Right(unit);
     } else {
       Left(OfflineFailure());

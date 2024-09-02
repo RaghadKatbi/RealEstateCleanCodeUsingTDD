@@ -3,7 +3,7 @@ import 'package:real_estate/feautre/city/domain/entity/neighborhood.dart';
 
 
 class Estate extends Equatable {
-  final int? id;
+  final int id;
   final String type;
   final int? rooms;
   final int? bathrooms;

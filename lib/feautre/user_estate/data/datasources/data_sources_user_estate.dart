@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:real_estate/core/api/end_ponits.dart';
-import 'package:real_estate/core/constance/string.dart';
 import 'package:real_estate/core/error/exptions.dart';
 import 'package:real_estate/feautre/user_estate/data/model/estate_added_by_user_model.dart';
 import 'package:real_estate/feautre/user_estate/data/model/favorite_estate_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/api/api_consumer.dart';
 import '../../domain/entity/estate_added_by_user.dart';
 import '../../domain/entity/favorite_estate.dart';
@@ -27,6 +27,8 @@ class DataSourcesUserEstateImplement implements DataSourcesUserEstate {
 
   @override
   Future<Unit> addedEstate(EstateAddedByUserModel estate) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
     try {
       await api.post(EndPoint.addMyEstate, queryParameters: {
         "type": estate.propertyType,
@@ -47,7 +49,7 @@ class DataSourcesUserEstateImplement implements DataSourcesUserEstate {
         "neighborhood_id": estate.neighborhoodId,
         "building_rank": estate.buildingRank,
         "note": estate.note,
-        "token": getToken()
+        "token": token
       });
       return Future.value(unit);
     } on ServerException catch (e) {
@@ -57,13 +59,18 @@ class DataSourcesUserEstateImplement implements DataSourcesUserEstate {
 
   @override
   Future<List<EstateAddedByUser>> getAllEstateAddedByUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
     try {
       final response = await api.get(EndPoint.getMyEstate,
-          queryParameters: {ApiKey.token: getToken()});
-      List<EstateAddedByUserModel> Estate = await (response['data'] as List)
-          .map((estate) => EstateAddedByUserModel.fromJson(estate))
-          .toList();
+          queryParameters: {ApiKey.token: token});
+      List<EstateAddedByUserModel> Estate =
+          await (response['data']['pended'] as List)
+              .map((estate) => EstateAddedByUserModel.fromJson(estate))
+              .toList();
+      print(Estate);
       return Estate;
+
     } on ServerException catch (e) {
       throw Exception(e);
     }
@@ -71,9 +78,11 @@ class DataSourcesUserEstateImplement implements DataSourcesUserEstate {
 
   @override
   Future<List<FavoriteEstate>> getAllEstateFavorite() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
     try {
       final response = await api.get(EndPoint.getMyFavEstate,
-          queryParameters: {ApiKey.token: getToken()});
+          queryParameters: {ApiKey.token: token});
       List<FavoriteEstate> Estate = await (response['data'] as List)
           .map((estate) => FavoriteEstateModel.fromJson(estate))
           .toList();
@@ -85,9 +94,12 @@ class DataSourcesUserEstateImplement implements DataSourcesUserEstate {
 
   @override
   Future<Unit> setFavoriteAndUnset(int idEstate) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
     try {
-      api.post(EndPoint.setFav(idEstate),
-          queryParameters: {ApiKey.token: getToken()});
+      api.post(EndPoint.setFav(idEstate), queryParameters: {
+        ApiKey.token:token
+      });
       return Future.value(unit);
     } on ServerException catch (e) {
       throw Exception(e);

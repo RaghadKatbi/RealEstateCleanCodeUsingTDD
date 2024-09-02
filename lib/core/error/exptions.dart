@@ -8,12 +8,11 @@ class ServerException implements Exception {
 
 class OffLineException implements Exception {}
 
-class DioExeption implements Exception {}
 
-void handleDioExceptions(DioException e) {
+ handleDioExceptions(DioException e) {
   switch (e.type) {
     case DioExceptionType.connectionTimeout:
-      throw ServerException(ErrorModel.fromJson(e.response!.data));
+      return ServerException(ErrorModel.fromJson(e.response!.data));
     case DioExceptionType.sendTimeout:
       throw ServerException(ErrorModel.fromJson(e.response!.data));
     case DioExceptionType.receiveTimeout:

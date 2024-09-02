@@ -17,9 +17,12 @@ class CityRepositoryImplement implements CityRepository {
     if (await networkInfo.isConnected) {
     try{
       final remoteCity = await cityRemoteDataSources.getAllCities();
+      print(remoteCity);
       return right(remoteCity);
+
     }
      catch(e){
+      print(e.toString());
       return left(ServerFailure());
     }
     } else {

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:real_estate/core/error/failer.dart';
 import 'package:real_estate/feautre/auth/data/model/register_model.dart';
 import 'package:real_estate/feautre/auth/domain/entities/register.dart';
@@ -25,9 +26,22 @@ class RegisterRepositoryImplementation implements RegisterRepository {
         password: register.password,
         confirmPassword: register.confirmPassword);
     if (await networkInfo.isConnected) {
-      final remoteRegister =
-          await authRemoteDataSources.register(registerModel);
-      return right(remoteRegister);
+     try{
+       final remoteRegister =
+       await authRemoteDataSources.register(registerModel);
+       print("=======================================");
+       print(remoteRegister);
+       return right(remoteRegister);
+     }
+     on DioException catch(e) {
+       if (e.response.toString().contains('The phone has already been taken.'))
+         {
+           return left(PhoneAlreadyUsedFailure());
+         }
+
+      return left(ServerFailure());
+     }
+
     } else {
       return Left(OfflineFailure());
     }

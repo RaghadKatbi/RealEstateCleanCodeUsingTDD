@@ -25,9 +25,9 @@ class EstateRepositoryImplement implements EstateRepository {
 
   @override
   Future<Either<Failure, List<Estate>>> getFilterEstateByType(
-      String type, String purpose) async {
+      String type, String purpose,String city) async {
     if (await networkInfo.isConnected) {
-      final response = await dataSourcesEstate.getAllEstateByType();
+      final response = await dataSourcesEstate.getAllEstateByType( type ,purpose,city);
       return right(response);
     } else {
       return Left(OfflineFailure());

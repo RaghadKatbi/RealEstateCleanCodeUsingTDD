@@ -26,6 +26,8 @@ class AuthCubit extends Cubit<AuthState> {
         emit(LoginFailure(message: _mapFailureToMessage(failure)));
       },
       (token) {
+        print("+++++++++++++++++++++++++++++++++");
+        print(token);
         emit(LoginSuccess(token: token.token));
       },
     );
@@ -56,13 +58,15 @@ class AuthCubit extends Cubit<AuthState> {
     print(failure);
     switch (failure) {
       case ServerFailure _:
-        return "SERVER_FAILURE_MESSAGE";
+        return "حدثت مشكلة في السيرفر الرجاء المحاولة لاحقاَ";
       case OfflineFailure _:
         return "تأكد من اتصال جهازك بلانترنت";
-      case DioFailure _ :
-        return "phone error";
+      case PhoneOrPasswordUnCorrect _ :
+        return "كلمة المرور غير متطابقة مع  رقم الهاتف ";
+      case PhoneAlreadyUsedFailure _ :
+        return "رقم الهاتف مستخدم مسبقاَ";
       default:
-        return "Unexpected Error , Please try again later .";
+        return "خطأ غير متوقع حاول مرة أخرى";
     }
   }
 }

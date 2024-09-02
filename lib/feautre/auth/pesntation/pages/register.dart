@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:real_estate/core/widget/loading.dart';
 import 'package:real_estate/feautre/auth/pesntation/pages/verification.dart';
 import '../../../../core/widget/my_textfield.dart';
+import '../../../../core/widget/show_message.dart';
 import '../bloc_auth/auth_cubit.dart';
 import 'login.dart';
 
@@ -92,6 +93,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     if (!value.contains(RegExp(r'^[0-9]+$'))) {
                       return 'رقم الهاتف يجب أن يحتوي على أرقام فقط';
                     }
+                    if (value.length < 10) {
+                      return 'رقم الهاتف يجب ان يتكون من 10 ارقام';
+                    }
                     return null;
                   },
                 ),
@@ -154,47 +158,53 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 SizedBox(height: ScreenUtil().setHeight(20)),
-                BlocBuilder<AuthCubit, AuthState>(
-                  builder: (context, state) {
-                    return Center(
-                      child: SizedBox(
-                        width: ScreenUtil().setWidth(180),
-                        height: ScreenUtil().setHeight(50),
-                        child: ElevatedButton(
-                          style: const ButtonStyle(
-                            backgroundColor:
-                                WidgetStatePropertyAll(Color(0xffd1d1d1)),
-                          ),
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              context.read<AuthCubit>().register(
-                                  name.text,
-                                  phone.text,
-                                  password.text,
-                                  confirmPassword.text);
-                              if (state is RegisterSuccess) {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const VerificationPage(),
-                                    ));
-                              }
-                            }
-                          },
-                          child: state is RegisterLoading
-                              ? const LoadingWidget()
-                              : Text(
-                                  "إنشاء حساب",
-                                  style: TextStyle(
-                                    fontSize: ScreenUtil().setSp(18),
-                                    color: const Color(0xff0c3c6d),
-                                    fontFamily: 'changes',
-                                  ),
-                                ),
-                        ),
+                Center(
+                  child: SizedBox(
+                    width: ScreenUtil().setWidth(180),
+                    height: ScreenUtil().setHeight(50),
+                    child: ElevatedButton(
+                      style: const ButtonStyle(
+                        backgroundColor:
+                            WidgetStatePropertyAll(Color(0xffd1d1d1)),
                       ),
-                    );
-                  },
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          context.read<AuthCubit>().register(name.text,
+                              phone.text, password.text, confirmPassword.text);
+                        }
+                      },
+                      child: BlocBuilder<AuthCubit, AuthState>(
+                        builder: (context, state) {
+                          if (state is RegisterLoading) {
+                            return const LoadingWidget();
+                          } else if (state is RegisterSuccess) {
+                            WidgetsBinding.instance
+                                .addPostFrameCallback((timeStamp) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const VerificationPage(),
+                                ),
+                              );
+                            });
+                          } else if (state is RegisterFailure) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              showMessageDialog(context, state.message, "خطأ");
+                            });
+                          }
+                          return Text(
+                            "إنشاء حساب",
+                            style: TextStyle(
+                              fontSize: ScreenUtil().setSp(18),
+                              color: const Color(0xff0c3c6d),
+                              fontFamily: 'changes',
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

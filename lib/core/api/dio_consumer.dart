@@ -31,9 +31,9 @@ class DioConsumer extends ApiConsumer {
         data: isFromData ? FormData.fromMap(data) : data,
         queryParameters: queryParameters,
       );
-      return response.data;
+      return response;
     } on DioException catch (e) {
-      throw Exception(e.type);
+      throw Exception(e);
     }
   }
 
@@ -48,7 +48,7 @@ class DioConsumer extends ApiConsumer {
       );
       return response.data;
     } on DioException catch (e) {
-     throw Exception(e.type);
+     throw Exception(e);
     }
   }
 
@@ -65,9 +65,9 @@ class DioConsumer extends ApiConsumer {
         data: isFromData ? FormData.fromMap(data) : data,
         queryParameters: queryParameters,
       );
-      return response.data;
+      return response;
     } on DioException catch (e) {
-      throw Exception(e.type);
+      throw Exception(e);
     }
   }
 
@@ -78,15 +78,15 @@ class DioConsumer extends ApiConsumer {
         Map<String, dynamic>? queryParameters,
         bool isFromData = false,
       }) async {
-    try {
+    // try {
       final response = await dio.post(
         path,
         data: isFromData ? FormData.fromMap(data) : data,
         queryParameters: queryParameters,
       );
       return response.data;
-    } on DioException catch (e) {
-      throw Exception(e.type);
-    }
+    // } on DioException catch (e) {
+    //   throw Exception(e);
+    // }
   }
 }

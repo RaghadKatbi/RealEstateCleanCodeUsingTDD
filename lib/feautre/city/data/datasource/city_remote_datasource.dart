@@ -17,6 +17,8 @@ class CityRemoteDatasourceImp implements CityRemoteDatasource{
       List<CityModel> cities = (response['data'] as List)
           .map((city) => CityModel.fromJson(city))
           .toList();
+      print("+++++++++++++++++++++++++++++++++++");
+      print(cities);
       return cities;
   }
 

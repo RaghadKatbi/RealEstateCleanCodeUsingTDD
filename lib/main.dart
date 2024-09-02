@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:real_estate/core/api/dio_consumer.dart';
+import 'package:real_estate/core/constance/save_token.dart';
+import 'package:real_estate/core/constance/string.dart';
 import 'package:real_estate/core/network/network_info.dart';
 import 'package:real_estate/feautre/auth/data/datasources/auth_remote_data_sources.dart';
 import 'package:real_estate/feautre/auth/data/repository/login_repository_implement.dart';
@@ -26,22 +28,36 @@ import 'package:real_estate/feautre/estate/pesntation/bloc_estate/estate_cubit.d
 import 'package:real_estate/feautre/user_estate/data/datasources/data_sources_user_estate.dart';
 import 'package:real_estate/feautre/user_estate/data/repository/use_estate_repository_implement.dart';
 import 'package:real_estate/feautre/user_estate/domain/usecase/add_my_estate_use_case.dart';
+import 'package:real_estate/feautre/user_estate/domain/usecase/get_all_estate_added_by_user_usecase.dart';
+import 'package:real_estate/feautre/user_estate/domain/usecase/get_all_estate_favorite_usecase.dart';
+import 'package:real_estate/feautre/user_estate/domain/usecase/set_favorite_and_unset_usecase.dart';
 import 'package:real_estate/feautre/user_estate/pesntation/bloc_user_estate/user_estate_cubit.dart';
-import 'package:real_estate/my_bottom_nav.dart';
-import 'core/constance/string.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'core/my_them/mythem.dart';
 import 'feautre/city/data/repository/city_repository_implement.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 
-import 'feautre/user_estate/domain/repository/estate_added_and_favorite_by_user_repository.dart';
+import 'my_bottom_nav.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+
+  SaveToken saveToken = SaveToken();
+  String? token = await saveToken.getToken();
+
+  Widget homeScreen;
+  if (token == "null") {
+    homeScreen = LoginPage();
+  } else {
+    homeScreen = MyBottomNavigationBar(0, "A");
+  }
+
+  runApp(MyApp(homeScreen));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Widget homeScreen;
+  const MyApp(this.homeScreen, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +115,23 @@ class MyApp extends StatelessWidget {
                   repository: UserEstateRepositoryImplement(
                       networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
                       dataSourcesUserEstate: DataSourcesUserEstateImplement(
-                          api: DioConsumer(dio: Dio()))))),
+                          api: DioConsumer(dio: Dio())))),
+              getAllEstateUser: GetAllEstateAddedByUserUseCase(
+                  repository: UserEstateRepositoryImplement(
+                      networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
+                      dataSourcesUserEstate: DataSourcesUserEstateImplement(
+                          api: DioConsumer(dio: Dio())))),
+              getAllEstateFavorite: GetAllEstateFavoriteUseCase(
+                  repository: UserEstateRepositoryImplement(
+                      networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
+                      dataSourcesUserEstate: DataSourcesUserEstateImplement(
+                          api: DioConsumer(dio: Dio())))),
+              setFavoriteAndUnset: SetFavoriteAndUnsetUseCase(
+                  repository: UserEstateRepositoryImplement(
+                      networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
+                      dataSourcesUserEstate: DataSourcesUserEstateImplement(
+                          api: DioConsumer(dio: Dio())))))
+            ..getAllEstateAddedByUser(),
         )
       ],
       child: MaterialApp(
@@ -110,9 +142,8 @@ class MyApp extends StatelessWidget {
               splashIconSize: 200,
               duration: 3000,
               splash: Image.asset("asset/images/Artboard.png"),
-              nextScreen: getToken == ""
-                  ? LoginPage()
-                  : const MyBottomNavigationBar(0, "A"),
+              nextScreen: homeScreen,
+              //: const MyBottomNavigationBar(0, "A"),
               curve: Curves.linear,
               splashTransition: SplashTransition.scaleTransition,
               backgroundColor: const Color(0xf0d0dae6))),

@@ -21,12 +21,6 @@ final class EstateFailure extends EstateState {
 
 final class EstateFilterLoading extends EstateState {}
 
-final class EstateFilterSuccess extends EstateState {
-  final List<Estate> estateFilter;
-
-  EstateFilterSuccess({required this.estateFilter});
-}
-
 final class EstateFilterFailure extends EstateState {
   final String message;
 

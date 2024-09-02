@@ -10,10 +10,10 @@ class NeighborhoodModel extends Neighborhood {
 
   factory NeighborhoodModel.fromJson(Map<String, dynamic> json) {
     return NeighborhoodModel(
-        id: json['id'],
-        name: json['name'],
-        regionId: json['region_id'],
-        createdAt: json['created_at'],
-        updatedAt: json['updated_at']);
+        id: json['id']??0,
+        name: json['name']??"",
+        regionId: json['region_id']??0,
+        createdAt: json['created_at']??"",
+        updatedAt: json['updated_at']??"");
   }
 }

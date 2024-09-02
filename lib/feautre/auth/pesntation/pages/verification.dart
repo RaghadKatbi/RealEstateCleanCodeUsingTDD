@@ -175,7 +175,7 @@ class _VerificationPageState extends State<VerificationPage> {
                     if (_textControllers[0].text == "") {
                       print("0");
                     } else {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const MyBottomNavigationBar(0,""),

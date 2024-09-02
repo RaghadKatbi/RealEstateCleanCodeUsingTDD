@@ -15,3 +15,11 @@ class DioFailure extends Failure{
   @override
   List<Object?> get props => [];
 }
+class PhoneAlreadyUsedFailure extends Failure{
+  @override
+  List<Object?> get props => [];
+}
+class PhoneOrPasswordUnCorrect extends Failure{
+  @override
+  List<Object?> get props => [];
+}

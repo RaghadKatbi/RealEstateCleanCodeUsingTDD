@@ -7,9 +7,12 @@ class EndPoint {
   static String addMyEstate="storeTempEstate";
   static String getMyEstate="getMyEstate";
   static String getMyFavEstate="getFav";
-  static String getByCityType = "get_by_city_type/شقة/حلب/ايجار";
+  //static String getByCityType = "get_by_city_type/شقة/حلب/ايجار";
   static String getByCity(String nameCity){
     return "get_by_city/$nameCity";
+  }
+  static String getByCityType(String type,String purpose,String city){
+    return "get_by_city_type/$type/$city/$purpose";
   }
   static String setFav(int id){
     return "setFav/$id";

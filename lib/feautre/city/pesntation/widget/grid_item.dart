@@ -55,7 +55,6 @@ class _GridItemState extends State<GridItem> with TickerProviderStateMixin {
       child: MouseRegion(
         onHover: (event) => _handleHover(isHovered),
         onEnter: (event) => _handleHover(true),
-        //onExit: (_) => _handleHover(false),
         child: GestureDetector(
           onLongPress: () => _handleHover(isHovered),
           onTap: () {

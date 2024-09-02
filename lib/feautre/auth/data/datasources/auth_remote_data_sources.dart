@@ -25,7 +25,6 @@ class AuthRemoteDataSourcesDio implements AuthRemoteDataSources {
      await prefs.setString('token', user.token);
       return user;
   }
-
   @override
   Future<RegisterModel> register(RegisterModel register) async {
       final response = await api.post(

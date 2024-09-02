@@ -17,6 +17,8 @@ class CityCubit extends Cubit<CityState> {
     final response = await getAllCities();
     response.fold(
       (failure) {
+        print(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
+        print(failure);
         emit(CityFailure(message: _mapFailureToMessage(failure)));
       },
       (city) {

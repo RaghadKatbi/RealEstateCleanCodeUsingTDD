@@ -9,8 +9,8 @@ class GetFilterEstateByTypeUseCase{
 
   GetFilterEstateByTypeUseCase({required this.repository});
 
-  Future<Either<Failure,List<Estate>>> call(String type,String purpose) async {
-    return await repository.getFilterEstateByType(type, purpose);
+  Future<Either<Failure,List<Estate>>> call(String type,String purpose,String city) async {
+    return await repository.getFilterEstateByType(type, purpose,city);
   }
 
 }

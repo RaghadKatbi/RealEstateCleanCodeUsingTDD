@@ -24,6 +24,18 @@ class EstateCubit extends Cubit<EstateState> {
       },
     );
   }
+  void getFilterEstate(String type,String propose,String city) async {
+    emit(EstateLoading());
+    final response = await getFilterEstateByType(type,propose,city);
+    response.fold(
+          (failure) {
+        emit(EstateFilterFailure(message: _mapFailureToMessage(failure)));
+      },
+          (estate) {
+        emit(EstateSuccess(estate: estate));
+      },
+    );
+  }
   String _mapFailureToMessage(Failure failure) {
     switch (failure.runtimeType) {
       case ServerFailure:
