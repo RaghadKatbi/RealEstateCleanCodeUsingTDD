@@ -7,9 +7,16 @@ class EndPoint {
   static String addMyEstate="storeTempEstate";
   static String getMyEstate="getMyEstate";
   static String getMyFavEstate="getFav";
-  //static String getByCityType = "get_by_city_type/شقة/حلب/ايجار";
+  static String agent="show_agents";
+  static String searchForAgent="Advancedsearch";
   static String getByCity(String nameCity){
     return "get_by_city/$nameCity";
+  }
+  static String getAllRegion(int idCity){
+    return "get_region/$idCity";
+  }
+  static String getAllNeighborhood(int idRegion){
+    return "getneighborhood/$idRegion";
   }
   static String getByCityType(String type,String purpose,String city){
     return "get_by_city_type/$type/$city/$purpose";

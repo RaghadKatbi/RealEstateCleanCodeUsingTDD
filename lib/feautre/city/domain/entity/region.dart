@@ -5,8 +5,8 @@ class Region extends Equatable {
   final int id;
   final String name;
   final int cityId;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final String createdAt;
+  final String updatedAt;
 
   const Region({
     required this.id,

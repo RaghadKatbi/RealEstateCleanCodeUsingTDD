@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:real_estate/core/error/failer.dart';
 import 'package:real_estate/core/network/network_info.dart';
 import 'package:real_estate/feautre/user_estate/data/datasources/data_sources_user_estate.dart';
@@ -17,7 +19,7 @@ class UserEstateRepositoryImplement
       {required this.dataSourcesUserEstate, required this.networkInfo});
 
   @override
-  Future<Either<Failure, Unit>> addedEstate(EstateAddedByUser estate) async {
+  Future<Either<Failure, Unit>> addedEstate(EstateAddedByUser estate,File image,File video) async {
     final EstateAddedByUserModel estateModel = EstateAddedByUserModel(
         image: estate.image,
         video: estate.video,
@@ -45,13 +47,18 @@ class UserEstateRepositoryImplement
         createdAt: estate.createdAt,
         reason: 0, detaillsAddress: '');
     if (await networkInfo.isConnected) {
-      await dataSourcesUserEstate.addedEstate(estateModel);
-      return const Right(unit);
+      try{
+        await dataSourcesUserEstate.addedEstate(estateModel,image,video);
+        return const Right(unit);
+      }
+     on DioException catch(e)
+    {
+     return Left(ServerFailure());
+    }
     } else {
-      Left(OfflineFailure());
+     return Left(OfflineFailure());
     }
 
-    throw Exception();
   }
 
   @override

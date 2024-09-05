@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../feautre/estate/domain/entity/estate.dart';
 import '../../feautre/user_estate/pesntation/bloc_user_estate/user_estate_cubit.dart';
 import '../../my_bottom_nav.dart';
@@ -59,7 +58,7 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const MyBottomNavigationBar(7, ""),
+                builder: (context) => const MyBottomNavigationBar(8, ""),
               ));
         },
         child: AnimatedBuilder(

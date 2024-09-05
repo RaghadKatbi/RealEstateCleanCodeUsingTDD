@@ -36,6 +36,12 @@ class _MyDrawerState extends State<MyDrawer> {
           // const SizedBox(height: 6),
           myAnimation(
             page: 3,
+            icon: Icons.people_alt_outlined,
+            text: 'الوكلاء العقاريين',
+            //isHovered: isHovered[1],
+          ),
+          myAnimation(
+            page: 4,
             icon: Icons.info_outline,
             text: 'من نحن',
             //isHovered: isHovered[1],
@@ -43,7 +49,7 @@ class _MyDrawerState extends State<MyDrawer> {
           //const SizedBox(height: 10),
           myAnimation(
             text: "تواصل معنا",
-            page: 4,
+            page: 5,
             icon: Icons.phone,
             //isHovered: isHovered[2],
           ),

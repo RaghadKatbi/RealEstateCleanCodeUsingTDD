@@ -4,5 +4,5 @@ import '../entity/region.dart';
 
 
 abstract class RegionRepository {
-  Future<Either<Failure, Region>> getAllRegion(int idCity);
+  Future<Either<Failure, List<Region>>> getAllRegion(int idCity);
 }

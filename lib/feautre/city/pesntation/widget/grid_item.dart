@@ -63,7 +63,7 @@ class _GridItemState extends State<GridItem> with TickerProviderStateMixin {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MyBottomNavigationBar(6, widget.name),
+                  builder: (context) => MyBottomNavigationBar(7, widget.name),
                 ));
           },
           child: AnimatedBuilder(

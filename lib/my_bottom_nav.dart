@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:real_estate/feautre/REagent/pesentation/pages/RE_agent.dart';
 import 'package:real_estate/feautre/city/pesntation/pages/city_page.dart';
 import 'package:real_estate/feautre/estate/pesntation/pages/all_estate_page.dart';
 import 'package:real_estate/feautre/estate/pesntation/pages/detailse_estate.dart';
+import 'package:real_estate/feautre/user_estate/pesntation/bloc_user_estate/user_estate_cubit.dart';
 import 'package:real_estate/feautre/user_estate/pesntation/pages/my_estate.dart';
 import 'core/widget/my_drawer.dart';
 import 'core/widget/mycustom_appbar.dart';
 import 'feautre/about_us/pesntation/page/about_us_page.dart';
+import 'feautre/city/pesntation/city_bloc/city_cubit.dart';
 import 'feautre/contact_us/pesntation/pages/contact_us_pages.dart';
 import 'feautre/user_estate/pesntation/pages/add_estate.dart';
 import 'feautre/user_estate/pesntation/pages/fav_esatate.dart';
 
-
 class MyBottomNavigationBar extends StatefulWidget {
   final i;
- final String nameCity;
+  final String nameCity;
 
   const MyBottomNavigationBar(this.i, this.nameCity, {super.key});
 
@@ -28,7 +31,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   final List<Widget> page = [
     const CityPage(),
     const MyEstatePage(),
-   const FavEstatePage(),
+    const FavEstatePage(),
+    ReAgentPage(),
     const AboutUs(),
     const ContactUs(),
   ];
@@ -38,21 +42,25 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   void initState() {
     selectedIndex = widget.i;
     iconSelect = selectedIndex;
-    if (selectedIndex == 6) {
+    if (selectedIndex == 7) {
       iconSelect = 0;
-     newPage =AllEstatePage(widget.nameCity);
-    } else if (selectedIndex == 7) {
-      iconSelect = 0;
-     newPage = const DetailseEstate();
+      newPage = AllEstatePage(widget.nameCity);
     } else if (selectedIndex == 8) {
+      iconSelect = 0;
+      newPage = const DetailseEstate();
+    } else if (selectedIndex == 9) {
       iconSelect = 1;
       newPage = const AddRealEstate();
     }
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    context.read<CityCubit>().getAllCity();
+    context.read<UserEstateCubit>().getFavoriteEstate();
+    context.read<UserEstateCubit>().getAllEstateAddedByUser();
     final GlobalKey<ScaffoldState> _sKey = GlobalKey<ScaffoldState>();
     return SafeArea(
       child: Scaffold(
@@ -70,7 +78,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
             child: MyDrawer(),
           ),
         ),
-        body: selectedIndex < 5 ? page[selectedIndex] : newPage,
+        body: selectedIndex < 6 ? page[selectedIndex] : newPage,
         bottomNavigationBar: CurvedNavigationBar(
           items: const <Widget>[
             Icon(
@@ -85,6 +93,11 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
             ),
             Icon(
               Icons.favorite_sharp,
+              size: 30,
+              color: Colors.white,
+            ),
+            Icon(
+              Icons.people_alt_outlined,
               size: 30,
               color: Colors.white,
             ),

@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:real_estate/core/api/dio_consumer.dart';
 import 'package:real_estate/core/constance/save_token.dart';
-import 'package:real_estate/core/constance/string.dart';
 import 'package:real_estate/core/network/network_info.dart';
 import 'package:real_estate/feautre/auth/data/datasources/auth_remote_data_sources.dart';
 import 'package:real_estate/feautre/auth/data/repository/login_repository_implement.dart';
@@ -15,7 +14,11 @@ import 'package:real_estate/feautre/auth/pesntation/bloc_auth/auth_cubit.dart';
 import 'package:real_estate/feautre/auth/pesntation/pages/login.dart';
 import 'package:real_estate/feautre/city/data/datasource/city_remote_datasource.dart';
 import 'package:real_estate/feautre/city/domain/usecase/city_usecase.dart';
+import 'package:real_estate/feautre/city/domain/usecase/neighborhood_useCase.dart';
+import 'package:real_estate/feautre/city/domain/usecase/region_useCase.dart';
 import 'package:real_estate/feautre/city/pesntation/city_bloc/city_cubit.dart';
+import 'package:real_estate/feautre/city/pesntation/neighborhood_bloc/neighborhood_cubit.dart';
+import 'package:real_estate/feautre/city/pesntation/region_bloc/region_cubit.dart';
 import 'package:real_estate/feautre/contact_us/data/datasources/data_Sources_Contact_us.dart';
 import 'package:real_estate/feautre/contact_us/data/reposiyory/contact_us_repository.dart';
 import 'package:real_estate/feautre/contact_us/domain/usecase/contact_usecase.dart';
@@ -32,11 +35,11 @@ import 'package:real_estate/feautre/user_estate/domain/usecase/get_all_estate_ad
 import 'package:real_estate/feautre/user_estate/domain/usecase/get_all_estate_favorite_usecase.dart';
 import 'package:real_estate/feautre/user_estate/domain/usecase/set_favorite_and_unset_usecase.dart';
 import 'package:real_estate/feautre/user_estate/pesntation/bloc_user_estate/user_estate_cubit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'core/my_them/mythem.dart';
 import 'feautre/city/data/repository/city_repository_implement.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-
+import 'feautre/city/data/repository/neighborhood_repository_implement.dart';
+import 'feautre/city/data/repository/region_repository_implement.dart';
 import 'my_bottom_nav.dart';
 
 void main() async {
@@ -57,6 +60,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final Widget homeScreen;
+
   const MyApp(this.homeScreen, {super.key});
 
   @override
@@ -80,13 +84,21 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<CityCubit>(
             create: (_) => CityCubit(
-                getAllCities: CityUseCase(
-                    repository: CityRepositoryImplement(
-                        networkInfo:
-                            NetworkInfoImpl(InternetConnectionChecker()),
-                        cityRemoteDataSources: CityRemoteDatasourceImp(
-                            api: DioConsumer(dio: Dio())))))
-              ..getAllCity()),
+                  getAllCities: CityUseCase(
+                      repository: CityRepositoryImplement(
+                          networkInfo:
+                              NetworkInfoImpl(InternetConnectionChecker()),
+                          cityRemoteDataSources: CityRemoteDatasourceImp(
+                              api: DioConsumer(dio: Dio())))),
+                )..getAllCity()),
+        BlocProvider<RegionCubit>(
+          create: (_) => RegionCubit(
+              getAllRegions: RegionUseCase(
+                  repository: RegionRepositoryImplement(
+                      networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
+                      cityRemoteDataSources: CityRemoteDatasourceImp(
+                          api: DioConsumer(dio: Dio()))))),
+        ),
         BlocProvider<ContactUsCubit>(
           create: (_) => ContactUsCubit(
               contactUsUseCase: ContactUseCase(
@@ -132,6 +144,14 @@ class MyApp extends StatelessWidget {
                       dataSourcesUserEstate: DataSourcesUserEstateImplement(
                           api: DioConsumer(dio: Dio())))))
             ..getAllEstateAddedByUser(),
+        ),
+        BlocProvider(
+          create: (_) => NeighborhoodCubit(
+              getAllNeighborhoods: NeighborhoodUseCase(
+                  repository: NeighborhoodRepositoryImplement(
+                      networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
+                      cityRemoteDataSources: CityRemoteDatasourceImp(
+                          api: DioConsumer(dio: Dio()))))),
         )
       ],
       child: MaterialApp(

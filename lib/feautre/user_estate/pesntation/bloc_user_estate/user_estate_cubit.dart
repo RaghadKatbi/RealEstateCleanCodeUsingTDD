@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:real_estate/feautre/user_estate/data/model/estate_added_by_user_model.dart';
-import '../../../estate/domain/entity/estate.dart';
+import 'package:real_estate/feautre/user_estate/domain/entity/favorite_estate.dart';
+import '../../../../core/error/failer.dart';
 import '../../domain/entity/estate_added_by_user.dart';
 import '../../domain/usecase/add_my_estate_use_case.dart';
 import '../../domain/usecase/get_all_estate_added_by_user_usecase.dart';
@@ -23,13 +25,13 @@ class UserEstateCubit extends Cubit<UserEstateState> {
       required this.setFavoriteAndUnset})
       : super(UserEstateInitial());
 
-  void addMyEstate(EstateAddedByUserModel myEstate) async {
+  void addMyEstate(EstateAddedByUserModel myEstate, File image,File video) async {
     try {
       emit(UserEstateLoadingMyAddEstate());
-      final response = await addMyEstateUseCase(myEstate);
+      final response = await addMyEstateUseCase(myEstate,image,video);
       response.fold(
         (failure) {
-          emit(UserEstateFailureMyAddEstate(message: failure.toString()));
+          emit(UserEstateFailureMyAddEstate(message: _mapFailureToMessage(failure)));
         },
         (estate) {
           emit(UserEstateSuccessMyAddEstate());
@@ -45,7 +47,7 @@ class UserEstateCubit extends Cubit<UserEstateState> {
     final response =await getAllEstateUser();
     response.fold(
           (failure) {
-        emit(UserEstateFailureMyEstate(message: failure.toString()));
+        emit(UserEstateFailureMyEstate(message: _mapFailureToMessage(failure)));
       },
           (estate) {
         emit(UserEstateSuccessMyEstate(estateAddedByUser: estate));
@@ -54,19 +56,15 @@ class UserEstateCubit extends Cubit<UserEstateState> {
   }
 
   void getFavoriteEstate() async {
-    List<Estate> AllEstate = [];
     emit(UserEstateLoadingMyFavEstate());
 
     final response = await getAllEstateFavorite();
     response.fold(
           (failure) {
-        emit(UserEstateFailureMyFavEstate(message: failure.toString()));
+        emit(UserEstateFailureMyFavEstate(message: _mapFailureToMessage(failure)));
       },
           (estate) {
-        List<Estate> filteredProperties = AllEstate.where((property) =>
-            estate.any((favoriteProperty) => favoriteProperty.id == property.id)).toList();
-
-        emit(UserEstateSuccessMyFavEstate(favoriteEstate: filteredProperties));
+        emit(UserEstateSuccessMyFavEstate(favoriteEstate: estate ));
       },
     );
   }
@@ -74,11 +72,21 @@ class UserEstateCubit extends Cubit<UserEstateState> {
     final response = await setFavoriteAndUnset(idEstate);
     response.fold(
           (failure) {
-            emit(UserEstateFailureSetOrUnSet(message: failure.toString()));
+            emit(UserEstateFailureSetOrUnSet(message: _mapFailureToMessage(failure)));
       },
           (unit) {
             emit(UserEstateSuccessSetOrUnSet());
       },
     );
+  }
+  String _mapFailureToMessage(Failure failure) {
+    switch (failure.runtimeType) {
+      case ServerFailure:
+        return "SERVER_FAILURE_MESSAGE";
+      case OfflineFailure:
+        return "OFFLINE_FAILURE_MESSAGE";
+      default:
+        return "Unexpected Error , Please try again later .";
+    }
   }
 }

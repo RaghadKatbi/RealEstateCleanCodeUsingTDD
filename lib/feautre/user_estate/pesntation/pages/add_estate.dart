@@ -1,14 +1,17 @@
 import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:real_estate/feautre/city/domain/entity/region.dart';
+import 'package:real_estate/feautre/city/pesntation/city_bloc/city_cubit.dart';
+import 'package:real_estate/feautre/city/pesntation/neighborhood_bloc/neighborhood_cubit.dart';
 import 'package:real_estate/feautre/user_estate/pesntation/bloc_user_estate/user_estate_cubit.dart';
-import 'package:video_player/video_player.dart';
 import '../../../../core/widget/loading.dart';
 import '../../../../core/widget/my_textfield.dart';
 import '../../../../core/widget/show_message.dart';
+import '../../../city/domain/entity/city.dart';
+import '../../../city/domain/entity/neighborhood.dart';
+import '../../../city/pesntation/region_bloc/region_cubit.dart';
 import '../../data/model/estate_added_by_user_model.dart';
 
 class AddRealEstate extends StatefulWidget {
@@ -36,40 +39,61 @@ class _AddRealEstateState extends State<AddRealEstate> {
     TextEditingController(),
     TextEditingController(),
   ];
-  bool isVideo = false;
-
-  VideoPlayerController? _controller;
-  VideoPlayerController? _toBeDisposed;
-  late XFile video, image;
   final ImagePicker _picker = ImagePicker();
-  final TextEditingController maxWidthController = TextEditingController();
-  final TextEditingController maxHeightController = TextEditingController();
-  final TextEditingController qualityController = TextEditingController();
-  final TextEditingController limitController = TextEditingController();
-  String selectedCity = '';
-  String selectedRegion = '';
+  String? selectedCity = '';
+  String? selectedRegion = '';
+  int regionId = 0;
   List<String> neighborhoods = [];
-  Map<String, List<String>> regions = {
-    'دمشق': ["ميدان", "الشاغور", "المزة", "الميدان", "المزرعة"],
-    'حلب': ["الفردوس", "الزهراء", "الشيخ مقصود", "السكري", "الصاخور"]
-  };
 
-  Future<void> _disposeVideoController() async {
-    if (_toBeDisposed != null) {
-      await _toBeDisposed!.dispose();
-    }
-    _toBeDisposed = _controller;
-    _controller = null;
+  Set<String> cityNames = Set();
+  Set<String> regionNames = Set();
+
+  late File image = File("");
+  late File video = File("");
+  Future<void> chooseImage() async {
+    var chooseImage = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      image = File(chooseImage!.path);
+    });
+  }
+  Future<void> chooseVideo() async {
+    var chooseImage = await _picker.pickVideo(source: ImageSource.gallery);
+    setState(() {
+      video = File(chooseImage!.path);
+    });
   }
 
-  void dispose() {
-    _disposeVideoController();
-    maxWidthController.dispose();
-    maxHeightController.dispose();
-    qualityController.dispose();
-    super.dispose();
+  String? selectedNeighborhood;
+
+  late int selectId = 0;
+
+  List<DropdownMenuItem<String>> getCityDropdownItems(List<City> cities) {
+    return cities.map((city) {
+      return DropdownMenuItem<String>(
+        value: city.name,
+        child: Text(city.name),
+      );
+    }).toList();
   }
 
+  List<DropdownMenuItem<String>> getRegionDropdownItems(List<Region> regions) {
+    return regions.map((region) {
+      return DropdownMenuItem<String>(
+        value: region.name,
+        child: Text(region.name),
+      );
+    }).toList();
+  }
+
+  List<DropdownMenuItem<String>> getNeighborhoodDropdownItems(
+      List<Neighborhood> neighborhoods) {
+    return neighborhoods.map((neighborhood) {
+      return DropdownMenuItem<String>(
+        value: neighborhood.name,
+        child: Text(neighborhood.name),
+      );
+    }).toList();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -283,150 +307,95 @@ class _AddRealEstateState extends State<AddRealEstate> {
                 validator: (value) => null,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: DropdownButton<String>(
-                isExpanded: true,
-                value: selectedCity.isEmpty ? null : selectedCity,
-                hint: const SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    'اختر مدينة',
-                    style: TextStyle(fontFamily: 'cairo', color: Colors.grey),
-                    textAlign: TextAlign.right,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+
+                Flexible(
+                  child: BlocBuilder<NeighborhoodCubit, NeighborhoodState>(
+                    builder: (context, state) {
+                      return DropdownButton<String>(
+                        isExpanded: true,
+                        hint: Text('اختر حي'),
+                        value: selectedNeighborhood,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedNeighborhood = newValue;
+                          });
+                        },
+                        items: selectedRegion != null && state is NeighborhoodSuccess
+                            ? getNeighborhoodDropdownItems(state.neighborhood)
+                            : [],
+                      );
+                    },
                   ),
                 ),
-                style:
-                    const TextStyle(fontFamily: 'cairo', color: Colors.black),
-                underline: Container(),
-                icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
-                items: regions.keys.map((String city) {
-                  return DropdownMenuItem<String>(
-                    value: city,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: Colors.blueGrey.shade50,
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Text(
-                          city,
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(
-                              fontFamily: 'cairo', color: Colors.black),
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedCity = value!;
-                    selectedRegion = '';
-                    neighborhoods = [];
-                  });
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: DropdownButton<String>(
-                isExpanded: true,
-                value: selectedRegion.isEmpty ? null : selectedRegion,
-                hint: const SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    'اختر منطقة',
-                    style: TextStyle(fontFamily: 'cairo', color: Colors.grey),
-                    textAlign: TextAlign.right,
+                Flexible(
+                  child: BlocBuilder<RegionCubit, RegionState>(
+                    builder: (context, state) {
+                      return DropdownButton<String>(
+                        isExpanded: true,
+                        hint: Text('اختر منطقة'),
+                        value: selectedRegion,
+                        onChanged: (String? newValue) {
+                          int regionId = 0;
+                          setState(() {
+                            selectedRegion = newValue;
+                            selectedNeighborhood = null;
+                            regionId = state is RegionSuccess
+                                ? state.region
+                                .firstWhere((region) => region.name == selectedRegion)
+                                .id
+                                : 0;
+                          });
+                          context.read<NeighborhoodCubit>().getAllNeighborhood(regionId);
+                        },
+                        items: selectedCity != null && state is RegionSuccess
+                            ? getRegionDropdownItems(state.region)
+                            : [],
+                      );
+                    },
                   ),
                 ),
-                style:
-                    const TextStyle(fontFamily: 'cairo', color: Colors.black),
-                underline: Container(),
-                icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
-                items: selectedCity.isEmpty
-                    ? []
-                    : regions[selectedCity]!.map((String region) {
-                        return DropdownMenuItem<String>(
-                          value: region,
-                          child: Text(region),
-                        );
-                      }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedRegion = value!;
-                    // قم بتحديث الأحياء في هذه المنطقة
-                  });
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: DropdownButton<String>(
-                isExpanded: true,
-                value: selectedCity.isEmpty ? null : selectedCity,
-                hint: const SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    'اختر حي',
-                    style: TextStyle(fontFamily: 'cairo', color: Colors.grey),
-                    textAlign: TextAlign.right,
+                Flexible(
+                  child: BlocBuilder<CityCubit, CityState>(
+                    builder: (context, state) {
+                      return DropdownButton<String>(
+                        isExpanded: true,
+                        hint: Text('اختر مدينة'),
+                        value: selectedCity,
+                        onChanged: (String? newValue) {
+                          int cityId = 0;
+                          setState(() {
+                            selectedCity = newValue;
+                            cityId = state is CitySuccess
+                                ? state.city
+                                .firstWhere((city) => city.name == selectedCity)
+                                .id
+                                : 0;
+                            selectedRegion = null;
+                            selectedNeighborhood = null;
+                          });
+                          context.read<RegionCubit>().getAllRegion(cityId);
+                        },
+                        items: state is CitySuccess ? getCityDropdownItems(state.city) : [],
+                      );
+                    },
                   ),
                 ),
-                style:
-                    const TextStyle(fontFamily: 'cairo', color: Colors.black),
-                underline: Container(),
-                icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
-                items: regions.keys.map((String city) {
-                  return DropdownMenuItem<String>(
-                    value: city,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: Colors.blueGrey.shade50,
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Text(
-                          city,
-                          textAlign: TextAlign.right, // تحديد موقع النص
-                          style: const TextStyle(
-                              fontFamily: 'cairo', color: Colors.black),
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedCity = value!;
-                    selectedRegion = '';
-                    neighborhoods = [];
-                  });
-                },
-              ),
+              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
                     onPressed: () {
-                      isVideo = false;
-                      _onImageButtonPressed(ImageSource.gallery,
-                          context: context);
+                      chooseImage();
                     },
                     child: Text("Choose photo")),
                 ElevatedButton(
                     onPressed: () {
-                      isVideo = true;
-                      _onImageButtonPressed(ImageSource.gallery,
-                          context: context);
+                      chooseVideo();
                     },
                     child: Text("Choose video")),
               ],
@@ -467,7 +436,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                                     meterPrice: _textControllers[11].text,
                                     streetWidth: _textControllers[12].text,
                                     location: _textControllers[13].text,
-                                    features: "_textControllers[14].text",
+                                    features: _textControllers[14].text,
                                     neighborhoodId: 1,
                                     userId: 1,
                                     buildingRank: 0,
@@ -479,7 +448,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                                     detaillsAddress: '');
                             context
                                 .read<UserEstateCubit>()
-                                .addMyEstate(estateAddedByUser);
+                                .addMyEstate(estateAddedByUser,image,video);
                             // }
                           },
                           child: BlocBuilder<UserEstateCubit, UserEstateState>(
@@ -517,52 +486,5 @@ class _AddRealEstateState extends State<AddRealEstate> {
     );
   }
 
-  Future<void> _playVideo(XFile? file) async {
-    if (file != null && mounted) {
-      await _disposeVideoController();
-      late VideoPlayerController controller;
-      if (kIsWeb) {
-        controller = VideoPlayerController.networkUrl(Uri.parse(file.path));
-      } else {
-        controller = VideoPlayerController.file(File(file.path));
-      }
-      _controller = controller;
-      await controller.initialize();
-      await controller.setLooping(true);
-      await controller.play();
-      setState(() {});
-    }
-  }
 
-  Future<void> _onImageButtonPressed(
-    ImageSource source, {
-    required BuildContext context,
-  }) async {
-    if (_controller != null) {
-      await _controller!.setVolume(0.0);
-    }
-    if (context.mounted) {
-      if (isVideo) {
-        final XFile? file = await _picker.pickVideo(
-            source: source, maxDuration: const Duration(seconds: 10));
-        await _playVideo(file);
-        video = file!;
-      } else {
-        final XFile? file = await _picker.pickImage(
-          source: source,
-        );
-        image = file!;
-      }
-    }
-    return null;
-  }
-
-  @override
-  void deactivate() {
-    if (_controller != null) {
-      _controller!.setVolume(0.0);
-      _controller!.pause();
-    }
-    super.deactivate();
-  }
 }

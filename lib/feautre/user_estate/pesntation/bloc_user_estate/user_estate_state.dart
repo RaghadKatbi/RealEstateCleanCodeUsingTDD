@@ -22,7 +22,7 @@ final class UserEstateFailureMyEstate extends UserEstateState {
 final class UserEstateLoadingMyFavEstate extends UserEstateState {}
 
 final class UserEstateSuccessMyFavEstate extends UserEstateState {
-  final List<Estate> favoriteEstate;
+  final List<FavoriteEstate> favoriteEstate;
 
   UserEstateSuccessMyFavEstate({required this.favoriteEstate});
 }

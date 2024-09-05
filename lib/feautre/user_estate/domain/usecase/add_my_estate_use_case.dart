@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/error/failer.dart';
 import '../entity/estate_added_by_user.dart';
@@ -9,8 +12,8 @@ class AddMyEstateUseCase {
 
   AddMyEstateUseCase({required this.repository});
 
-  Future<Either<Failure, Unit>> call(EstateAddedByUser estate){
-    return repository.addedEstate(estate);
+  Future<Either<Failure, Unit>> call(EstateAddedByUser estate,File image,File video){
+    return repository.addedEstate(estate,image,video);
   }
 
 }
