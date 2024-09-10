@@ -12,6 +12,10 @@ class EndPoint {
   static String getByCity(String nameCity){
     return "get_by_city/$nameCity";
   }
+  static String getEstate(int id)
+  {
+    return "show_property/$id";
+  }
   static String getAllRegion(int idCity){
     return "get_region/$idCity";
   }

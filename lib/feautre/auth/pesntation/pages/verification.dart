@@ -178,7 +178,7 @@ class _VerificationPageState extends State<VerificationPage> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const MyBottomNavigationBar(0,""),
+                          builder: (context) => const MyBottomNavigationBar(0,"",0),
                         ),
                       );
                     }

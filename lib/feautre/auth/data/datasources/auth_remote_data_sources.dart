@@ -36,6 +36,9 @@ class AuthRemoteDataSourcesDio implements AuthRemoteDataSources {
           "password_confirmation": register.confirmPassword
         },
       );
+      final loginUser=LoginModel(phone: register.phone, password: register.password, token: '');
+      final logIn =login(loginUser);
+      print(logIn.toString());
       final user = RegisterModel.fromJson(response['user']);
       return user;
   }

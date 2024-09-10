@@ -26,15 +26,19 @@ import 'package:real_estate/feautre/contact_us/pesntation/bloc_contact/contact_u
 import 'package:real_estate/feautre/estate/data/datasources/data_sources_estate.dart';
 import 'package:real_estate/feautre/estate/data/repsitory/estate_repository_implement.dart';
 import 'package:real_estate/feautre/estate/domain/usecase/get_all_estate_usecase.dart';
+import 'package:real_estate/feautre/estate/domain/usecase/get_esatate.dart';
 import 'package:real_estate/feautre/estate/domain/usecase/get_filter_estate_by_type_usecase.dart';
 import 'package:real_estate/feautre/estate/pesntation/bloc_estate/estate_cubit.dart';
+import 'package:real_estate/feautre/estate/pesntation/details/details_cubit.dart';
 import 'package:real_estate/feautre/user_estate/data/datasources/data_sources_user_estate.dart';
 import 'package:real_estate/feautre/user_estate/data/repository/use_estate_repository_implement.dart';
 import 'package:real_estate/feautre/user_estate/domain/usecase/add_my_estate_use_case.dart';
 import 'package:real_estate/feautre/user_estate/domain/usecase/get_all_estate_added_by_user_usecase.dart';
 import 'package:real_estate/feautre/user_estate/domain/usecase/get_all_estate_favorite_usecase.dart';
 import 'package:real_estate/feautre/user_estate/domain/usecase/set_favorite_and_unset_usecase.dart';
+import 'package:real_estate/feautre/user_estate/pesntation/add_estate/add_esatate_cubit.dart';
 import 'package:real_estate/feautre/user_estate/pesntation/bloc_user_estate/user_estate_cubit.dart';
+import 'package:real_estate/feautre/user_estate/pesntation/favEstate/fav_estate_cubit.dart';
 import 'core/my_them/mythem.dart';
 import 'feautre/city/data/repository/city_repository_implement.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
@@ -47,12 +51,12 @@ void main() async {
 
   SaveToken saveToken = SaveToken();
   String? token = await saveToken.getToken();
-
+  print(token);
   Widget homeScreen;
   if (token == "null") {
     homeScreen = LoginPage();
   } else {
-    homeScreen = MyBottomNavigationBar(0, "A");
+    homeScreen = MyBottomNavigationBar(0, "", 0);
   }
 
   runApp(MyApp(homeScreen));
@@ -123,17 +127,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => UserEstateCubit(
-              addMyEstateUseCase: AddMyEstateUseCase(
-                  repository: UserEstateRepositoryImplement(
-                      networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
-                      dataSourcesUserEstate: DataSourcesUserEstateImplement(
-                          api: DioConsumer(dio: Dio())))),
               getAllEstateUser: GetAllEstateAddedByUserUseCase(
-                  repository: UserEstateRepositoryImplement(
-                      networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
-                      dataSourcesUserEstate: DataSourcesUserEstateImplement(
-                          api: DioConsumer(dio: Dio())))),
-              getAllEstateFavorite: GetAllEstateFavoriteUseCase(
                   repository: UserEstateRepositoryImplement(
                       networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
                       dataSourcesUserEstate: DataSourcesUserEstateImplement(
@@ -146,11 +140,37 @@ class MyApp extends StatelessWidget {
             ..getAllEstateAddedByUser(),
         ),
         BlocProvider(
+          create: (_) => FavEstateCubit(
+              getAllEstateFavorite: GetAllEstateFavoriteUseCase(
+                  repository: UserEstateRepositoryImplement(
+                      networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
+                      dataSourcesUserEstate: DataSourcesUserEstateImplement(
+                          api: DioConsumer(dio: Dio())))))
+            ..getFavoriteEstate(),
+        ),
+        BlocProvider(
           create: (_) => NeighborhoodCubit(
               getAllNeighborhoods: NeighborhoodUseCase(
                   repository: NeighborhoodRepositoryImplement(
                       networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
                       cityRemoteDataSources: CityRemoteDatasourceImp(
+                          api: DioConsumer(dio: Dio()))))),
+        ),
+        BlocProvider(
+          create: (_) => DetailsCubit(
+              getEstateUseCase: GetEstateUseCase(
+                  repository: EstateRepositoryImplement(
+                      dataSourcesEstate: DataSourcesEstateImplement(
+                          api: DioConsumer(dio: Dio())),
+                      networkInfo:
+                          NetworkInfoImpl(InternetConnectionChecker())))),
+        ),
+        BlocProvider(
+          create: (_) => AddEsatateCubit(
+              addMyEstateUseCase: AddMyEstateUseCase(
+                  repository: UserEstateRepositoryImplement(
+                      networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
+                      dataSourcesUserEstate: DataSourcesUserEstateImplement(
                           api: DioConsumer(dio: Dio()))))),
         )
       ],

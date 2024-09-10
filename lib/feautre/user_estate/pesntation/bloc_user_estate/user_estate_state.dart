@@ -19,30 +19,6 @@ final class UserEstateFailureMyEstate extends UserEstateState {
   UserEstateFailureMyEstate({required this.message});
 }
 
-final class UserEstateLoadingMyFavEstate extends UserEstateState {}
-
-final class UserEstateSuccessMyFavEstate extends UserEstateState {
-  final List<FavoriteEstate> favoriteEstate;
-
-  UserEstateSuccessMyFavEstate({required this.favoriteEstate});
-}
-
-final class UserEstateFailureMyFavEstate extends UserEstateState {
-  final String message;
-
-  UserEstateFailureMyFavEstate({required this.message});
-}
-
-final class UserEstateLoadingMyAddEstate extends UserEstateState {}
-
-final class UserEstateSuccessMyAddEstate extends UserEstateState {
-}
-
-final class UserEstateFailureMyAddEstate extends UserEstateState {
-  final String message;
-
-  UserEstateFailureMyAddEstate({required this.message});
-}
 final class UserEstateSuccessSetOrUnSet extends UserEstateState {}
 final class UserEstateFailureSetOrUnSet extends UserEstateState {
   final String message;

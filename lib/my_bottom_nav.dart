@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:real_estate/feautre/REagent/pesentation/pages/RE_agent.dart';
 import 'package:real_estate/feautre/city/pesntation/pages/city_page.dart';
 import 'package:real_estate/feautre/estate/pesntation/pages/all_estate_page.dart';
-import 'package:real_estate/feautre/estate/pesntation/pages/detailse_estate.dart';
-import 'package:real_estate/feautre/user_estate/pesntation/bloc_user_estate/user_estate_cubit.dart';
 import 'package:real_estate/feautre/user_estate/pesntation/pages/my_estate.dart';
 import 'core/widget/my_drawer.dart';
 import 'core/widget/mycustom_appbar.dart';
 import 'feautre/about_us/pesntation/page/about_us_page.dart';
-import 'feautre/city/pesntation/city_bloc/city_cubit.dart';
 import 'feautre/contact_us/pesntation/pages/contact_us_pages.dart';
+import 'feautre/estate/pesntation/pages/detailse_estate.dart';
 import 'feautre/user_estate/pesntation/pages/add_estate.dart';
 import 'feautre/user_estate/pesntation/pages/fav_esatate.dart';
 
 class MyBottomNavigationBar extends StatefulWidget {
   final i;
   final String nameCity;
+  final int idEstate;
 
-  const MyBottomNavigationBar(this.i, this.nameCity, {super.key});
+  const MyBottomNavigationBar(this.i, this.nameCity,this.idEstate, {super.key, });
 
   @override
   State<MyBottomNavigationBar> createState() => _MyBottomNavigationBarState();
@@ -36,7 +34,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
     const AboutUs(),
     const ContactUs(),
   ];
-  late Widget newPage = const DetailseEstate();
+  late Widget newPage = const EstateDetails();
 
   @override
   void initState() {
@@ -47,7 +45,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
       newPage = AllEstatePage(widget.nameCity);
     } else if (selectedIndex == 8) {
       iconSelect = 0;
-      newPage = const DetailseEstate();
+      newPage = const EstateDetails();
     } else if (selectedIndex == 9) {
       iconSelect = 1;
       newPage = const AddRealEstate();
@@ -58,9 +56,6 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<CityCubit>().getAllCity();
-    context.read<UserEstateCubit>().getFavoriteEstate();
-    context.read<UserEstateCubit>().getAllEstateAddedByUser();
     final GlobalKey<ScaffoldState> _sKey = GlobalKey<ScaffoldState>();
     return SafeArea(
       child: Scaffold(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../feautre/estate/domain/entity/estate.dart';
-import '../../feautre/user_estate/pesntation/bloc_user_estate/user_estate_cubit.dart';
+import '../../feautre/estate/pesntation/details/details_cubit.dart';
 import '../../my_bottom_nav.dart';
 
 class EstateSuccessWidget extends StatefulWidget {
@@ -55,10 +55,11 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
       onHover: (_) => _handleHover(isHovered),
       child: InkWell(
         onTap: () {
+          context.read<DetailsCubit>().getEstate(widget.estate.id);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const MyBottomNavigationBar(8, ""),
+                builder: (context) => MyBottomNavigationBar(8, "",widget.estate.id),
               ));
         },
         child: AnimatedBuilder(
@@ -115,26 +116,26 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                IconButton(
-                                    onPressed: () {
-                                      context
-                                          .read<UserEstateCubit>()
-                                          .setFavoriteEstate(
-                                              widget.estate.id);
-                                      setState(() {
-                                        if (isFavorite) {
-                                          isFavorite = false;
-                                        } else
-                                          isFavorite = true;
-                                      });
-                                    },
-                                    icon: Icon(
-                                      isFavorite
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
-                                      color: const Color(0xff1a395b),
-                                      size: 35,
-                                    )),
+                                // IconButton(
+                                //     onPressed: () {
+                                //       context
+                                //           .read<UserEstateCubit>()
+                                //           .setFavoriteEstate(
+                                //               widget.estate.id);
+                                //       setState(() {
+                                //         if (isFavorite) {
+                                //           isFavorite = false;
+                                //         } else
+                                //           isFavorite = true;
+                                //       });
+                                //     },
+                                //     icon: Icon(
+                                //       isFavorite
+                                //           ? Icons.favorite
+                                //           : Icons.favorite_border,
+                                //       color: const Color(0xff1a395b),
+                                //       size: 35,
+                                //     )),
                                 Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,

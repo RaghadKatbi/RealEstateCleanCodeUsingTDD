@@ -71,7 +71,7 @@ class _MyDrawerState extends State<MyDrawer> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => MyBottomNavigationBar(page,""),
+              builder: (context) => MyBottomNavigationBar(page,"",0),
             ));
       },
       child: Row(

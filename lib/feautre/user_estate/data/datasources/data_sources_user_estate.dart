@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:real_estate/core/api/end_ponits.dart';
 import 'package:real_estate/core/error/exptions.dart';
 import 'package:real_estate/feautre/user_estate/data/model/estate_added_by_user_model.dart';
@@ -32,6 +32,8 @@ class DataSourcesUserEstateImplement implements DataSourcesUserEstate {
       EstateAddedByUserModel estate, File image, File video) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
+    print(image);
+    print(video);
     try {
       await api.post(EndPoint.addMyEstate,
           queryParameters: {
@@ -48,14 +50,17 @@ class DataSourcesUserEstateImplement implements DataSourcesUserEstate {
             "description": estate.description,
             "meter_price": estate.meterPrice,
             "street_width": estate.streetWidth,
-            "location": estate.location,
+            "location": "estate.location",
             "features": estate.features,
-            "neighborhood_id": estate.neighborhoodId,
+            "neighborhood_id": 121,
             "building_rank": estate.buildingRank,
             "note": estate.note,
             "token": token
           },
-          data: {"image": image, "video": video},
+          data: {
+            "estate_image": await MultipartFile.fromFile(image.path),
+            "estate_video": await MultipartFile.fromFile(video.path),
+          },
           isFromData: true);
       return Future.value(unit);
     } on ServerException catch (e) {
@@ -74,6 +79,7 @@ class DataSourcesUserEstateImplement implements DataSourcesUserEstate {
           await (response['data']['pended'] as List)
               .map((estate) => EstateAddedByUserModel.fromJson(estate))
               .toList();
+      ///
       print(Estate);
       return Estate;
     } on ServerException catch (e) {

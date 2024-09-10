@@ -33,4 +33,14 @@ class EstateRepositoryImplement implements EstateRepository {
       return Left(OfflineFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, Estate>> getEstate(int idEstate)async {
+    if (await networkInfo.isConnected) {
+      final response = await dataSourcesEstate.getEstate(idEstate);
+      return right(response);
+    } else {
+      return Left(OfflineFailure());
+    }
+  }
 }
