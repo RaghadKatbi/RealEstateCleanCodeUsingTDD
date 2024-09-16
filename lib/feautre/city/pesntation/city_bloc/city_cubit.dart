@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:real_estate/feautre/city/domain/entity/region.dart';
 import '../../../../core/error/failer.dart';
+import '../../../../core/error/function_error.dart';
 import '../../domain/entity/city.dart';
 import '../../domain/entity/neighborhood.dart';
 import '../../domain/usecase/city_usecase.dart';
@@ -24,7 +25,7 @@ class CityCubit extends Cubit<CityState> {
     response.fold(
       (failure) {
         print(failure);
-        emit(CityFailure(message: _mapFailureToMessage(failure)));
+        emit(CityFailure(message: mapFailureToMessage(failure)));
       },
       (city) {
         emit(CitySuccess(city: city));
@@ -32,17 +33,4 @@ class CityCubit extends Cubit<CityState> {
     );
   }
 
-
-
-
-  String _mapFailureToMessage(Failure failure) {
-    switch (failure.runtimeType) {
-      case ServerFailure:
-        return "SERVER_FAILURE_MESSAGE";
-      case OfflineFailure:
-        return "OFFLINE_FAILURE_MESSAGE";
-      default:
-        return "Unexpected Error , Please try again later .";
-    }
-  }
 }

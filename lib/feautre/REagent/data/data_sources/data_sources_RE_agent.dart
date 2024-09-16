@@ -1,4 +1,5 @@
 import 'package:real_estate/core/api/end_ponits.dart';
+import 'package:real_estate/feautre/REagent/data/model/RE_agent_model.dart';
 import 'package:real_estate/feautre/REagent/domain/entity/RE_agent.dart';
 
 import '../../../../core/api/api_consumer.dart';
@@ -20,7 +21,10 @@ class DataSourcesReAgentImplement extends DataSourcesREAgent{
     final response =await api.get(EndPoint.agent,queryParameters: {
       ApiKey.token:token
     });
-    return response;
+    List<ReAgentModel> REAgent = (response['data'] as List)
+        .map((city) =>ReAgentModel.forJson(city))
+        .toList();
+    return REAgent;
   }
 
   @override

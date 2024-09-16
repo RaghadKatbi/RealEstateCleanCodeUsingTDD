@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:real_estate/core/constance/string.dart';
+import 'package:real_estate/core/widget/loading.dart';
 import 'package:real_estate/feautre/city/domain/entity/neighborhood.dart';
-import 'package:real_estate/feautre/city/pesntation/city_bloc/city_cubit.dart';
-import 'package:real_estate/feautre/city/pesntation/neighborhood_bloc/neighborhood_cubit.dart';
-import 'package:real_estate/feautre/city/pesntation/region_bloc/region_cubit.dart';
+import 'package:real_estate/feautre/city/domain/entity/region.dart';
 import '../../../city/domain/entity/city.dart';
-import '../../../city/domain/entity/region.dart';
+import '../../../city/pesntation/city_bloc/city_cubit.dart';
+import '../../../city/pesntation/neighborhood_bloc/neighborhood_cubit.dart';
+import '../../../city/pesntation/region_bloc/region_cubit.dart';
+import '../bloc/reagent_cubit.dart';
 
 class ReAgentPage extends StatefulWidget {
   ReAgentPage({Key? key});
@@ -19,9 +21,7 @@ class _ReAgentPageState extends State<ReAgentPage> {
   TextEditingController searchForReAgent = TextEditingController();
 
   String? selectedCity;
-
   String? selectedRegion;
-
   String? selectedNeighborhood;
 
   late int selectId = 0;
@@ -44,8 +44,7 @@ class _ReAgentPageState extends State<ReAgentPage> {
     }).toList();
   }
 
-  List<DropdownMenuItem<String>> getNeighborhoodDropdownItems(
-      List<Neighborhood> neighborhoods) {
+  List<DropdownMenuItem<String>> getNeighborhoodDropdownItems(List<Neighborhood> neighborhoods) {
     return neighborhoods.map((neighborhood) {
       return DropdownMenuItem<String>(
         value: neighborhood.name,
@@ -159,13 +158,43 @@ class _ReAgentPageState extends State<ReAgentPage> {
                 style: TextStyle(color: pColor, fontSize: 20),
               ),
             ),
-            SizedBox(
-              height: 100,
-            ),
-            Center(
-              child: Text(
-                "لا يوجد وكلاء عقاريين حتى الآن ..... سيتم إضافتهم قريباً",
-              ),
+            BlocBuilder<ReagentCubit, ReagentState>(
+              builder: (context, state) {
+                if (state is ReagentLoading) {
+                  return Center(child: LoadingWidget());
+                } else if (state is ReagentSuccess) {
+                  final agents = state.rEAgent;
+                  if (agents.isNotEmpty) {
+                    return Column(
+                      children: agents.map((agent) {
+                        return Card(
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(agent.image),
+                            ),
+                            title: Text(agent.name),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("رقم الهاتف الأرضي: ${agent.phone}"),
+                                Text("رقم الموبايل: ${agent.mobile}"),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  } else {
+                    return Center(
+                      child: Text("لا يوجد وكلاء عقاريين حتى الآن ..... سيتم إضافتهم قريباً"),
+                    );
+                  }
+                } else if (state is ReagentFailure) {
+                  return Center(child: Text(state.message));
+                } else {
+                  return Center(child: Text("حدث خطأ ما"));
+                }
+              },
             ),
           ],
         ),

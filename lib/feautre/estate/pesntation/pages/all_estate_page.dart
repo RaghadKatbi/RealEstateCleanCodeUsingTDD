@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:real_estate/core/widget/loading.dart';
 import '../../../../core/widget/estate_success_widget.dart';
 import '../../../../core/widget/header_screen.dart';
+import '../../../../my_bottom_nav.dart';
 import '../bloc_estate/estate_cubit.dart';
 
 class AllEstatePage extends StatefulWidget {
@@ -31,12 +32,18 @@ class _AllEstatePageState extends State<AllEstatePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          children: [
-            const HeaderScreen(),
-            _buildTypeSelector(),
-            _buildEstateList(),
-          ],
+        body:  PopScope(
+          canPop: false,
+          onPopInvoked : (didPop){
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyBottomNavigationBar(0, "", 0),));
+          },
+          child: Column(
+            children: [
+              const HeaderScreen(),
+              _buildTypeSelector(),
+              _buildEstateList(),
+            ],
+          ),
         ),
       ),
     );
@@ -131,8 +138,8 @@ class _AllEstatePageState extends State<AllEstatePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                _buildBottomSheetButton('بيع'),
-                _buildBottomSheetButton('إيجار'),
+                 _buildBottomSheetButton('بيع'),
+                _buildBottomSheetButton('ايجار'),
                 _buildBottomSheetButton('رهن'),
               ],
             ),

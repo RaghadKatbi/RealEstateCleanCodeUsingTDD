@@ -19,10 +19,4 @@ final class UserEstateFailureMyEstate extends UserEstateState {
   UserEstateFailureMyEstate({required this.message});
 }
 
-final class UserEstateSuccessSetOrUnSet extends UserEstateState {}
-final class UserEstateFailureSetOrUnSet extends UserEstateState {
-  final String message;
 
-  UserEstateFailureSetOrUnSet({required this.message});
-
-}

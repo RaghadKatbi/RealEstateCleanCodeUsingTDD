@@ -5,6 +5,10 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:real_estate/core/api/dio_consumer.dart';
 import 'package:real_estate/core/constance/save_token.dart';
 import 'package:real_estate/core/network/network_info.dart';
+import 'package:real_estate/feautre/REagent/data/data_sources/data_sources_RE_agent.dart';
+import 'package:real_estate/feautre/REagent/data/repository/RE_agent_repsitory_implement.dart';
+import 'package:real_estate/feautre/REagent/domain/usecase/get_all_RE_agent_use_case.dart';
+import 'package:real_estate/feautre/REagent/pesentation/bloc/reagent_cubit.dart';
 import 'package:real_estate/feautre/auth/data/datasources/auth_remote_data_sources.dart';
 import 'package:real_estate/feautre/auth/data/repository/login_repository_implement.dart';
 import 'package:real_estate/feautre/auth/data/repository/register_repository_implementation.dart';
@@ -39,11 +43,13 @@ import 'package:real_estate/feautre/user_estate/domain/usecase/set_favorite_and_
 import 'package:real_estate/feautre/user_estate/pesntation/add_estate/add_esatate_cubit.dart';
 import 'package:real_estate/feautre/user_estate/pesntation/bloc_user_estate/user_estate_cubit.dart';
 import 'package:real_estate/feautre/user_estate/pesntation/favEstate/fav_estate_cubit.dart';
+import 'package:real_estate/feautre/user_estate/pesntation/set_favorite/set_favoriate_cubit.dart';
 import 'core/my_them/mythem.dart';
 import 'feautre/city/data/repository/city_repository_implement.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'feautre/city/data/repository/neighborhood_repository_implement.dart';
 import 'feautre/city/data/repository/region_repository_implement.dart';
+import 'feautre/user_estate/domain/usecase/isFavUseCase.dart';
 import 'my_bottom_nav.dart';
 
 void main() async {
@@ -51,11 +57,13 @@ void main() async {
 
   SaveToken saveToken = SaveToken();
   String? token = await saveToken.getToken();
-  print(token);
+
   Widget homeScreen;
   if (token == "null") {
+    print(token);
     homeScreen = LoginPage();
   } else {
+    print(token);
     homeScreen = MyBottomNavigationBar(0, "", 0);
   }
 
@@ -112,7 +120,7 @@ class MyApp extends StatelessWidget {
                           DataSourcesContactUsImplement(
                               api: DioConsumer(dio: Dio()))))),
         ),
-        BlocProvider(
+        BlocProvider<EstateCubit>(
           create: (_) => EstateCubit(
               getAllEstate: GetAllEstateUseCase(
                   repository: EstateRepositoryImplement(
@@ -125,21 +133,16 @@ class MyApp extends StatelessWidget {
                       dataSourcesEstate: DataSourcesEstateImplement(
                           api: DioConsumer(dio: Dio()))))),
         ),
-        BlocProvider(
+        BlocProvider<UserEstateCubit>(
           create: (_) => UserEstateCubit(
-              getAllEstateUser: GetAllEstateAddedByUserUseCase(
-                  repository: UserEstateRepositoryImplement(
-                      networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
-                      dataSourcesUserEstate: DataSourcesUserEstateImplement(
-                          api: DioConsumer(dio: Dio())))),
-              setFavoriteAndUnset: SetFavoriteAndUnsetUseCase(
-                  repository: UserEstateRepositoryImplement(
-                      networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
-                      dataSourcesUserEstate: DataSourcesUserEstateImplement(
-                          api: DioConsumer(dio: Dio())))))
-            ..getAllEstateAddedByUser(),
+            getAllEstateUser: GetAllEstateAddedByUserUseCase(
+                repository: UserEstateRepositoryImplement(
+                    networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
+                    dataSourcesUserEstate: DataSourcesUserEstateImplement(
+                        api: DioConsumer(dio: Dio())))),
+          )..getAllEstateAddedByUser(),
         ),
-        BlocProvider(
+        BlocProvider<FavEstateCubit>(
           create: (_) => FavEstateCubit(
               getAllEstateFavorite: GetAllEstateFavoriteUseCase(
                   repository: UserEstateRepositoryImplement(
@@ -148,7 +151,7 @@ class MyApp extends StatelessWidget {
                           api: DioConsumer(dio: Dio())))))
             ..getFavoriteEstate(),
         ),
-        BlocProvider(
+        BlocProvider<NeighborhoodCubit>(
           create: (_) => NeighborhoodCubit(
               getAllNeighborhoods: NeighborhoodUseCase(
                   repository: NeighborhoodRepositoryImplement(
@@ -156,7 +159,7 @@ class MyApp extends StatelessWidget {
                       cityRemoteDataSources: CityRemoteDatasourceImp(
                           api: DioConsumer(dio: Dio()))))),
         ),
-        BlocProvider(
+        BlocProvider<DetailsCubit>(
           create: (_) => DetailsCubit(
               getEstateUseCase: GetEstateUseCase(
                   repository: EstateRepositoryImplement(
@@ -165,14 +168,36 @@ class MyApp extends StatelessWidget {
                       networkInfo:
                           NetworkInfoImpl(InternetConnectionChecker())))),
         ),
-        BlocProvider(
+        BlocProvider<AddEsatateCubit>(
           create: (_) => AddEsatateCubit(
               addMyEstateUseCase: AddMyEstateUseCase(
                   repository: UserEstateRepositoryImplement(
                       networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
                       dataSourcesUserEstate: DataSourcesUserEstateImplement(
                           api: DioConsumer(dio: Dio()))))),
-        )
+        ),
+        BlocProvider<SetFavoriateCubit>(
+            create: (_) => SetFavoriateCubit(
+                setFavoriteAndUnset: SetFavoriteAndUnsetUseCase(
+                    repository: UserEstateRepositoryImplement(
+                  dataSourcesUserEstate: DataSourcesUserEstateImplement(
+                      api: DioConsumer(dio: Dio())),
+                  networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
+                )),
+                isFav: isFavUseCase(
+                    repository: UserEstateRepositoryImplement(
+                  dataSourcesUserEstate: DataSourcesUserEstateImplement(
+                      api: DioConsumer(dio: Dio())),
+                  networkInfo: NetworkInfoImpl(InternetConnectionChecker()),
+                )))),
+        BlocProvider<ReagentCubit>(
+            create: (_) => ReagentCubit(
+                reAgentUseCase: GetAllReAgentUseCase(
+                    repository: ReAgentRepsitoryImplement(
+                        networkInfo:
+                            NetworkInfoImpl(InternetConnectionChecker()),
+                        dataSourcesREAgent: DataSourcesReAgentImplement(
+                            api: DioConsumer(dio: Dio())))))..getAllREAgent())
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -183,7 +208,6 @@ class MyApp extends StatelessWidget {
               duration: 3000,
               splash: Image.asset("asset/images/Artboard.png"),
               nextScreen: homeScreen,
-              //: const MyBottomNavigationBar(0, "A"),
               curve: Curves.linear,
               splashTransition: SplashTransition.scaleTransition,
               backgroundColor: const Color(0xf0d0dae6))),

@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/error/failer.dart';
+import '../../../../core/error/function_error.dart';
 import '../../data/model/estate_added_by_user_model.dart';
 import '../../domain/usecase/add_my_estate_use_case.dart';
 
@@ -18,7 +19,7 @@ class AddEsatateCubit extends Cubit<AddEsatateState> {
       final response = await addMyEstateUseCase(myEstate,image,video);
       response.fold(
             (failure) {
-          emit(UserEstateFailureMyAddEstate(message: _mapFailureToMessage(failure)));
+          emit(UserEstateFailureMyAddEstate(message: mapFailureToMessage(failure)));
         },
             (estate) {
           emit(UserEstateSuccessMyAddEstate());
@@ -26,16 +27,6 @@ class AddEsatateCubit extends Cubit<AddEsatateState> {
       );
     } catch (e) {
       throw Exception(e);
-    }
-  }
-  String _mapFailureToMessage(Failure failure) {
-    switch (failure.runtimeType) {
-      case ServerFailure:
-        return "SERVER_FAILURE_MESSAGE";
-      case OfflineFailure:
-        return "OFFLINE_FAILURE_MESSAGE";
-      default:
-        return "Unexpected Error , Please try again later .";
     }
   }
 }

@@ -19,7 +19,8 @@ class UserEstateRepositoryImplement
       {required this.dataSourcesUserEstate, required this.networkInfo});
 
   @override
-  Future<Either<Failure, Unit>> addedEstate(EstateAddedByUser estate,File image,File video) async {
+  Future<Either<Failure, Unit>> addedEstate(
+      EstateAddedByUser estate, File image, File video) async {
     final EstateAddedByUserModel estateModel = EstateAddedByUserModel(
         image: estate.image,
         video: estate.video,
@@ -45,20 +46,18 @@ class UserEstateRepositoryImplement
         note: estate.note,
         updatedAt: estate.updatedAt,
         createdAt: estate.createdAt,
-        reason: 0, detaillsAddress: '');
+        reason: "",
+        detaillsAddress: '');
     if (await networkInfo.isConnected) {
-      try{
-        await dataSourcesUserEstate.addedEstate(estateModel,image,video);
+      try {
+        await dataSourcesUserEstate.addedEstate(estateModel, image, video);
         return const Right(unit);
+      } on DioException {
+        return Left(ServerFailure());
       }
-     on DioException catch(e)
-    {
-     return Left(ServerFailure());
-    }
     } else {
-     return Left(OfflineFailure());
+      return Left(OfflineFailure());
     }
-
   }
 
   @override
@@ -85,10 +84,22 @@ class UserEstateRepositoryImplement
   }
 
   @override
-  Future<Either<Failure, Unit>> setFavoriteAndUnset(int idEstate) async {
+  Future<Either<Failure, bool>> setFavoriteAndUnset(int idEstate) async {
     if (await networkInfo.isConnected) {
-      await dataSourcesUserEstate.setFavoriteAndUnset(idEstate);
-      return const Right(unit);
+      final response =
+          await dataSourcesUserEstate.setFavoriteAndUnset(idEstate);
+      return Right(response);
+    } else {
+      Left(OfflineFailure());
+    }
+    throw Exception();
+  }
+
+  @override
+  Future<Either<Failure, bool>> isFav(int idEstate) async {
+    if (await networkInfo.isConnected) {
+      final response = await dataSourcesUserEstate.isFav(idEstate);
+      return Right(response);
     } else {
       Left(OfflineFailure());
     }

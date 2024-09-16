@@ -28,6 +28,9 @@ class EndPoint {
   static String setFav(int id){
     return "setFav/$id";
   }
+  static String isFav(int id){
+    return "isFavorited/$id";
+  }
 }
 
 class ApiKey {

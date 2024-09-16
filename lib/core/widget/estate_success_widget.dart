@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../feautre/estate/domain/entity/estate.dart';
 import '../../feautre/estate/pesntation/details/details_cubit.dart';
+import '../../feautre/user_estate/pesntation/set_favorite/set_favoriate_cubit.dart';
 import '../../my_bottom_nav.dart';
 
 class EstateSuccessWidget extends StatefulWidget {
@@ -56,6 +57,7 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
       child: InkWell(
         onTap: () {
           context.read<DetailsCubit>().getEstate(widget.estate.id);
+           context.read<SetFavoriateCubit>().isFavorite(widget.estate.id);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -113,71 +115,46 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
                           ),
                           SizedBox(
                             width: double.infinity,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            child: Column(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
                               children: [
-                                // IconButton(
-                                //     onPressed: () {
-                                //       context
-                                //           .read<UserEstateCubit>()
-                                //           .setFavoriteEstate(
-                                //               widget.estate.id);
-                                //       setState(() {
-                                //         if (isFavorite) {
-                                //           isFavorite = false;
-                                //         } else
-                                //           isFavorite = true;
-                                //       });
-                                //     },
-                                //     icon: Icon(
-                                //       isFavorite
-                                //           ? Icons.favorite
-                                //           : Icons.favorite_border,
-                                //       color: const Color(0xff1a395b),
-                                //       size: 35,
-                                //     )),
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Text(
-                                      widget.estate.type,
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.grey,
-                                        fontFamily: 'cairo',
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Text(widget.estate.purpose,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontFamily: 'cairo',
-                                        )),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Text(widget.estate.location,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontFamily: 'cairo',
-                                        )),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Text(widget.estate.price,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.blue,
-                                          fontFamily: 'cairo',
-                                        ))
-                                  ],
+                                SizedBox(
+                                  height: 3,
                                 ),
+                                Text(
+                                  widget.estate.type,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.grey,
+                                    fontFamily: 'cairo',
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Text(widget.estate.purpose,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontFamily: 'cairo',
+                                    )),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Text(widget.estate.location,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontFamily: 'cairo',
+                                    )),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Text(widget.estate.price,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.blue,
+                                      fontFamily: 'cairo',
+                                    ))
                               ],
                             ),
                           ),

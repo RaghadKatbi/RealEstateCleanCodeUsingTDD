@@ -14,7 +14,7 @@ class FavoriteEstate extends Equatable {
   final String floor;
   final String description;
   final int numberShow;
-  final String? meterPrice;
+  final int? meterPrice;
   final String streetWidth;
   final String location;
   final String features;
@@ -22,10 +22,10 @@ class FavoriteEstate extends Equatable {
   final int? userId;
   final String estateImage;
   final String estateVideo;
-  final String? buildingRank;
+  final int? buildingRank;
   final String? status;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final String createdAt;
+  final String updatedAt;
 
   FavoriteEstate({
     required this.id,

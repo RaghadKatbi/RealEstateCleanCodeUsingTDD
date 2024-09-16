@@ -19,7 +19,8 @@ abstract class DataSourcesUserEstate {
 
   Future<List<FavoriteEstate>> getAllEstateFavorite();
 
-  Future<Unit> setFavoriteAndUnset(int idEstate);
+  Future<bool> setFavoriteAndUnset(int idEstate);
+  Future<bool> isFav(int idEstate);
 }
 
 class DataSourcesUserEstateImplement implements DataSourcesUserEstate {
@@ -50,9 +51,9 @@ class DataSourcesUserEstateImplement implements DataSourcesUserEstate {
             "description": estate.description,
             "meter_price": estate.meterPrice,
             "street_width": estate.streetWidth,
-            "location": "estate.location",
+            "location": estate.location,
             "features": estate.features,
-            "neighborhood_id": 121,
+            "neighborhood_id": estate.neighborhoodId,
             "building_rank": estate.buildingRank,
             "note": estate.note,
             "token": token
@@ -75,13 +76,25 @@ class DataSourcesUserEstateImplement implements DataSourcesUserEstate {
     try {
       final response = await api
           .get(EndPoint.getMyEstate, queryParameters: {ApiKey.token: token});
-      List<EstateAddedByUserModel> Estate =
-          await (response['data']['pended'] as List)
-              .map((estate) => EstateAddedByUserModel.fromJson(estate))
-              .toList();
-      ///
-      print(Estate);
-      return Estate;
+      List<EstateAddedByUserModel> estatePended = (response['data']['pended'] as List)
+          .map((estate) => EstateAddedByUserModel.fromJson(estate))
+          .toList();
+
+      List<EstateAddedByUserModel> estateAccepted = (response['data']['accepted'] as List)
+          .map((estate) => EstateAddedByUserModel.fromJson(estate))
+          .toList();
+
+      List<EstateAddedByUserModel> estateCanceled = (response['data']['canceled'] as List)
+          .map((estate) => EstateAddedByUserModel.fromJson(estate))
+          .toList();
+
+
+      List<EstateAddedByUserModel> estate = [];
+      estate.addAll(estatePended);
+      estate.addAll(estateAccepted);
+      estate.addAll(estateCanceled);
+      print(estate);
+      return estate;
     } on ServerException catch (e) {
       throw Exception(e);
     }
@@ -104,13 +117,25 @@ class DataSourcesUserEstateImplement implements DataSourcesUserEstate {
   }
 
   @override
-  Future<Unit> setFavoriteAndUnset(int idEstate) async {
+  Future<bool> setFavoriteAndUnset(int idEstate) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
     try {
-      api.post(EndPoint.setFav(idEstate),
+     final response=await api.post(EndPoint.setFav(idEstate),
           queryParameters: {ApiKey.token: token});
-      return Future.value(unit);
+      return Future.value(response['isFavorited']);
+    } on ServerException catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<bool> isFav(int idEstate) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    try {
+      final response=await api.get(EndPoint.isFav(idEstate),queryParameters:{ApiKey.token: token});
+      return Future.value(response['isFavorited']);
     } on ServerException catch (e) {
       throw Exception(e);
     }

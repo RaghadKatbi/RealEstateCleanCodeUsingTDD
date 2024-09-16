@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:dartz/dartz.dart';
 import 'package:real_estate/feautre/contact_us/data/model/contact_model.dart';
 import 'package:real_estate/feautre/contact_us/domain/usecase/contact_usecase.dart';
 import '../../../../core/error/failer.dart';
+import '../../../../core/error/function_error.dart';
 
 part 'contact_us_state.dart';
 
@@ -25,19 +25,9 @@ class ContactUsCubit extends Cubit<ContactUsState> {
     print(response);
     response.fold(
       (l) => emit(ContactUsFailure(
-          message: _mapFailureToMessage(response.toString() as Failure))),
+          message: mapFailureToMessage(l))),
       (r) => emit(ContactUsSuccess()),
     );
   }
 
-  String _mapFailureToMessage(Failure failure) {
-    switch (failure.runtimeType) {
-      case ServerFailure:
-        return "SERVER_FAILURE_MESSAGE";
-      case OfflineFailure:
-        return "تأكد من اتصال جهازك بلانترنت";
-      default:
-        return "Unexpected Error , Please try again later .";
-    }
-  }
 }

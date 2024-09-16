@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import '../../../../core/error/failer.dart';
+import '../../../../core/error/function_error.dart';
 import '../../data/model/login_model.dart';
 import '../../data/model/register_model.dart';
 import '../../domain/usecases/login_usecase.dart';
@@ -23,7 +23,7 @@ class AuthCubit extends Cubit<AuthState> {
     ));
     response.fold(
       (failure) {
-        emit(LoginFailure(message: _mapFailureToMessage(failure)));
+        emit(LoginFailure(message: mapFailureToMessage(failure)));
       },
       (token) {
         print("+++++++++++++++++++++++++++++++++");
@@ -46,7 +46,7 @@ class AuthCubit extends Cubit<AuthState> {
         confirmPassword: confirmPassword));
     response.fold(
       (failure) {
-        emit(RegisterFailure(message: _mapFailureToMessage(failure)));
+        emit(RegisterFailure(message: mapFailureToMessage(failure)));
       },
       (token) {
         emit(RegisterSuccess());
@@ -54,19 +54,5 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  String _mapFailureToMessage(Failure failure) {
-    print(failure);
-    switch (failure) {
-      case ServerFailure _:
-        return "حدثت مشكلة في السيرفر الرجاء المحاولة لاحقاَ";
-      case OfflineFailure _:
-        return "تأكد من اتصال جهازك بلانترنت";
-      case PhoneOrPasswordUnCorrect _ :
-        return "كلمة المرور غير متطابقة مع  رقم الهاتف ";
-      case PhoneAlreadyUsedFailure _ :
-        return "رقم الهاتف مستخدم مسبقاَ";
-      default:
-        return "خطأ غير متوقع حاول مرة أخرى";
-    }
-  }
+
 }

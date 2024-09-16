@@ -13,7 +13,7 @@ class EstateAddedByUser extends Equatable {
   final String license;
   final String floor;
   final String description;
-  final String meterPrice;
+  final int meterPrice;
   final String streetWidth;
   final String location;
   final String features;
@@ -26,7 +26,7 @@ class EstateAddedByUser extends Equatable {
   final String createdAt;
   final String image;
   final String video;
-  final int? reason;
+  final String? reason;
   final String? detaillsAddress;
 
   const EstateAddedByUser({

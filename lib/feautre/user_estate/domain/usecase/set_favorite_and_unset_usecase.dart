@@ -7,7 +7,7 @@ class SetFavoriteAndUnsetUseCase {
 
   SetFavoriteAndUnsetUseCase({required this.repository});
 
-  Future<Either<Failure, Unit>> call(int idEstate) async {
+  Future<Either<Failure, bool>> call(int idEstate) async {
     return await repository.setFavoriteAndUnset(idEstate);
   }
 }
