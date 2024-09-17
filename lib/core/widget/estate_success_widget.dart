@@ -1,24 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../feautre/estate/domain/entity/estate.dart';
 import '../../feautre/estate/pesntation/details/details_cubit.dart';
 import '../../feautre/user_estate/pesntation/set_favorite/set_favoriate_cubit.dart';
 import '../../my_bottom_nav.dart';
 
 class EstateSuccessWidget extends StatefulWidget {
-  final Estate estate;
-  const EstateSuccessWidget({super.key, required this.estate});
+  final String type;
+  final String purpose;
+  final String location;
+  final String space;
+  final String price;
+  final String estateImage;
+  final int rooms;
+  final int bathrooms;
+  final String status;
+  final int id;
+
+  const EstateSuccessWidget(
+      {super.key,
+      required this.type,
+      required this.purpose,
+      required this.location,
+      required this.space,
+      required this.price,
+      required this.rooms,
+      required this.bathrooms,
+      required this.id,
+      required this.estateImage,
+      required this.status});
 
   @override
   State<EstateSuccessWidget> createState() => EstateSuccessWidgetState();
 }
 
-class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProviderStateMixin {
+class EstateSuccessWidgetState extends State<EstateSuccessWidget>
+    with TickerProviderStateMixin {
   bool isRailVisible = false;
   bool isHovered = false;
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
-
+  late String st;
+  late String image;
   @override
   void initState() {
     super.initState();
@@ -28,6 +50,27 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
     );
     _scaleAnimation =
         Tween<double>(begin: 1.0, end: 1.1).animate(_animationController);
+    if(widget.status=="pend")
+      {
+        st="معلق";
+        image ="https://proengaqar.com/img/temp/${widget.estateImage}";
+      }
+    else if(widget.status=="cancel")
+      {
+        st="مرفوض";
+        image ="https://proengaqar.com/img/temp/${widget.estateImage}";
+      }
+    else if(widget.status=="accept")
+    {
+      st="مقبول";
+      image ="https://proengaqar.com/img/estate/${widget.estateImage}";
+    }
+    else if(widget.status=="المزيد من التفاصيل")
+    {
+      st="المزيد من التفاصيل";
+      image ="https://proengaqar.com/img/estate/${widget.estateImage}";
+    }
+
   }
 
   @override
@@ -55,15 +98,15 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
     return MouseRegion(
       onHover: (_) => _handleHover(isHovered),
       child: InkWell(
-        onTap: () {
-          context.read<DetailsCubit>().getEstate(widget.estate.id);
-           context.read<SetFavoriateCubit>().isFavorite(widget.estate.id);
+        onTap: st=="المزيد من التفاصيل" || st=="مقبول"?()  {
+          context.read<DetailsCubit>().getEstate(widget.id);
+          context.read<SetFavoriateCubit>().isFavorite(widget.id);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => MyBottomNavigationBar(8, "",widget.estate.id),
+                builder: (context) => MyBottomNavigationBar(8, "", widget.id),
               ));
-        },
+        }:(){},
         child: AnimatedBuilder(
             animation: _animationController,
             builder: (context, child) {
@@ -84,8 +127,7 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
                                     topRight: Radius.circular(15),
                                     topLeft: Radius.circular(15)),
                                 clipBehavior: Clip.antiAlias,
-                                child: Image.network(
-                                  "https://proengaqar.com/img/estate/${widget.estate.estateImage}",
+                                child: Image.network(image,
                                   height: 200,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
@@ -101,7 +143,7 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
                                       padding: const EdgeInsets.all(2.0),
                                       child: Text(
                                         selectionColor: Colors.blue.shade50,
-                                        "المزيد من التفاصيل  ",
+                                       st,
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,
@@ -116,14 +158,13 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
                           SizedBox(
                             width: double.infinity,
                             child: Column(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 SizedBox(
                                   height: 3,
                                 ),
                                 Text(
-                                  widget.estate.type,
+                                  widget.type,
                                   style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.grey,
@@ -133,7 +174,7 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
                                 SizedBox(
                                   height: 3,
                                 ),
-                                Text(widget.estate.purpose,
+                                Text(widget.purpose,
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontFamily: 'cairo',
@@ -141,7 +182,7 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
                                 SizedBox(
                                   height: 3,
                                 ),
-                                Text(widget.estate.location,
+                                Text(widget.location,
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontFamily: 'cairo',
@@ -149,7 +190,7 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
                                 SizedBox(
                                   height: 3,
                                 ),
-                                Text(widget.estate.price,
+                                Text(widget.price,
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.blue,
@@ -158,7 +199,7 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
                               ],
                             ),
                           ),
-                          Container(
+                       widget.type!="ارض" ?  Container(
                             color: Colors.black,
                             child: Padding(
                               padding: EdgeInsets.all(20.0),
@@ -176,7 +217,7 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
                                         width: 6,
                                       ),
                                       Text(
-                                        widget.estate.space,
+                                        widget.space,
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontFamily: 'cairo',
@@ -194,7 +235,7 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
                                         width: 6,
                                       ),
                                       Text(
-                                        "${widget.estate.rooms}",
+                                        "${widget.rooms}",
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontFamily: 'cairo',
@@ -212,7 +253,7 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
                                         width: 6,
                                       ),
                                       Text(
-                                        "${widget.estate.bathrooms}",
+                                        "${widget.bathrooms}",
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontFamily: 'cairo',
@@ -223,7 +264,7 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>with TickerProv
                                 ],
                               ),
                             ),
-                          )
+                          ): Container()
                         ],
                       )));
             }),

@@ -70,7 +70,7 @@ class CityPage extends StatelessWidget {
                           },
                         );
                       } else if (state is CityFailure) {
-                        return Text(state.message);
+                        return Center(child: Text(state.message));
                       }
                       return Text("++++++++++++++++");
                     },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:real_estate/core/constance/string.dart';
+import 'package:real_estate/core/widget/estate_success_widget.dart';
 import 'package:real_estate/feautre/user_estate/pesntation/favEstate/fav_estate_cubit.dart';
 
 import '../../../../core/widget/loading.dart';
@@ -46,181 +47,17 @@ class _FavEstatePageState extends State<FavEstatePage> {
                   } else
                     return ListView.builder(
                       itemCount: state.favoriteEstate.length,
-                      itemBuilder: (context, index) => MouseRegion(
-                        child: InkWell(
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const MyBottomNavigationBar(8, "", 0),
-                                  ));
-                            },
-                            child: Card(
-                                color: const Color(0xf0d0dae6),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                elevation: 50,
-                                margin: const EdgeInsets.all(15),
-                                child: Column(
-                                  children: [
-                                    Stack(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: const BorderRadius.only(
-                                              topRight: Radius.circular(15),
-                                              topLeft: Radius.circular(15)),
-                                          clipBehavior: Clip.antiAlias,
-                                          child: Image.network(
-                                            "https://proengaqar.com/img/estate/${state.favoriteEstate[index].estateImage}",
-                                            height: 200,
-                                            width: double.infinity,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        Positioned(
-                                            bottom: 20,
-                                            left: 10,
-                                            child: Container(
-                                              width: 200,
-                                              color: const Color(0xff365271),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(2.0),
-                                                child: Text(
-                                                  selectionColor:
-                                                      Colors.blue.shade50,
-                                                  "المزيد من التفاصيل",
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20,
-                                                      fontFamily: 'cairo'),
-                                                  softWrap: true,
-                                                  overflow: TextOverflow.fade,
-                                                ),
-                                              ),
-                                            ))
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          SizedBox(
-                                            height: 3,
-                                          ),
-                                          Text(
-                                            state.favoriteEstate[index].type,
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.grey,
-                                              fontFamily: 'cairo',
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 3,
-                                          ),
-                                          Text(
-                                              state.favoriteEstate[index]
-                                                  .purpose,
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                fontFamily: 'cairo',
-                                              )),
-                                          SizedBox(
-                                            height: 3,
-                                          ),
-                                          Text(
-                                              state.favoriteEstate[index]
-                                                  .location,
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                fontFamily: 'cairo',
-                                              )),
-                                          SizedBox(
-                                            height: 3,
-                                          ),
-                                          Text(
-                                              "${state.favoriteEstate[index].price}",
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.blue,
-                                                fontFamily: 'cairo',
-                                              ))
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      color: Colors.black,
-                                      child: Padding(
-                                        padding: EdgeInsets.all(20.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons
-                                                      .system_update_alt_outlined,
-                                                  color: Colors.white,
-                                                ),
-                                                SizedBox(
-                                                  width: 6,
-                                                ),
-                                                Text(
-                                                  "${state.favoriteEstate[index].space}",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: 'cairo',
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.roller_shades_outlined,
-                                                  color: Colors.white,
-                                                ),
-                                                SizedBox(
-                                                  width: 6,
-                                                ),
-                                                Text(
-                                                  "2 Rooms",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: 'cairo',
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.bathtub_outlined,
-                                                  color: Colors.white,
-                                                ),
-                                                SizedBox(
-                                                  width: 6,
-                                                ),
-                                                Text(
-                                                  "1 Bathrooms",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: 'cairo',
-                                                  ),
-                                                )
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ))),
+                      itemBuilder: (context, index) => EstateSuccessWidget(
+                        type: state.favoriteEstate[index].type,
+                        purpose: state.favoriteEstate[index].purpose,
+                        location: state.favoriteEstate[index].location,
+                        space: state.favoriteEstate[index].space,
+                        price: state.favoriteEstate[index].price,
+                        rooms: state.favoriteEstate[index].room,
+                        bathrooms: state.favoriteEstate[index].bathroom,
+                        id: state.favoriteEstate[index].id,
+                        estateImage: state.favoriteEstate[index].estateImage,
+                        status: 'المزيد من التفاصيل',
                       ),
                     );
                 } else if (state is UserEstateLoadingMyFavEstate) {

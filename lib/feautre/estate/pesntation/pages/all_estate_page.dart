@@ -17,7 +17,6 @@ class AllEstatePage extends StatefulWidget {
 
 class _AllEstatePageState extends State<AllEstatePage> {
   final List<String> type = [
-    "الكل",
     "شقة",
     "فيلا",
     "أرض",
@@ -32,10 +31,14 @@ class _AllEstatePageState extends State<AllEstatePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body:  PopScope(
+        body: PopScope(
           canPop: false,
-          onPopInvoked : (didPop){
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyBottomNavigationBar(0, "", 0),));
+          onPopInvoked: (didPop) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MyBottomNavigationBar(0, "", 0),
+                ));
           },
           child: Column(
             children: [
@@ -66,9 +69,9 @@ class _AllEstatePageState extends State<AllEstatePage> {
                 setState(() {
                   isSelected = index;
                 });
-                isSelected == 0
-                    ? context.read<EstateCubit>().getAllEstate(widget.nameCity)
-                    : _showBottomSheet();
+                // isSelected == 0
+                //     ? context.read<EstateCubit>().getAllEstate(widget.nameCity)
+                _showBottomSheet();
               },
               child: _buildTypeButton(index),
             ),
@@ -80,7 +83,7 @@ class _AllEstatePageState extends State<AllEstatePage> {
 
   Widget _buildTypeButton(int index) {
     return Container(
-      width: index == 6 ? 190 : 60,
+      width: index == 5 ? 190 : 60,
       height: 50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
@@ -114,8 +117,18 @@ class _AllEstatePageState extends State<AllEstatePage> {
             }
             return ListView.builder(
               itemCount: state.estate.length,
-              itemBuilder: (context, index) =>
-                  EstateSuccessWidget(estate: state.estate[index]),
+              itemBuilder: (context, index) => EstateSuccessWidget(
+                type: state.estate[index].type,
+                bathrooms: state.estate[index].bathrooms ?? 0,
+                estateImage: state.estate[index].estateImage,
+                id: state.estate[index].id,
+                location: state.estate[index].location,
+                price: state.estate[index].price,
+                purpose: state.estate[index].purpose,
+                rooms: state.estate[index].rooms ?? 0,
+                space: state.estate[index].space,
+                status: 'المزيد من التفاصيل',
+              ),
             );
           }
           return Center(child: Text("حدث خطأ ما "));
@@ -138,7 +151,7 @@ class _AllEstatePageState extends State<AllEstatePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                 _buildBottomSheetButton('بيع'),
+                _buildBottomSheetButton('بيع'),
                 _buildBottomSheetButton('ايجار'),
                 _buildBottomSheetButton('رهن'),
               ],
@@ -163,7 +176,9 @@ class _AllEstatePageState extends State<AllEstatePage> {
         ),
       ),
       onPressed: () {
-        context.read<EstateCubit>().getFilterEstate(type[isSelected], action, widget.nameCity);
+        context
+            .read<EstateCubit>()
+            .getFilterEstate(type[isSelected], action, widget.nameCity);
         Navigator.pop(context);
       },
     );
