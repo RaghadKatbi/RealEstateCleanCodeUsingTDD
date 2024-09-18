@@ -57,7 +57,7 @@ class _MyEstatePageState extends State<MyEstatePage> {
                         id: state.estateAddedByUser[index].id,
                         estateImage: state.estateAddedByUser[index].image,
                         status: state.estateAddedByUser[index].status,
-                        reasone: state.estateAddedByUser[index].reason ?? "",
+                        reasone: state.estateAddedByUser[index].reason ?? "0",
                       ),
                     );
                 } else if (state is UserEstateLoadingMyEstate) {

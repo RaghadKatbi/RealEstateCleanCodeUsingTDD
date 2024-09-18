@@ -56,7 +56,7 @@ class _FavEstatePageState extends State<FavEstatePage> {
                         bathrooms: state.favoriteEstate[index].bathroom,
                         id: state.favoriteEstate[index].id,
                         estateImage: state.favoriteEstate[index].estateImage,
-                        status: 'المزيد من التفاصيل', reasone: '',
+                        status: 'المزيد من التفاصيل', reasone: '0',
                       ),
                     );
                 } else if (state is UserEstateLoadingMyFavEstate) {
