@@ -47,16 +47,18 @@ class _MyEstatePageState extends State<MyEstatePage> {
                     return ListView.builder(
                       itemCount: state.estateAddedByUser.length,
                       itemBuilder: (context, index) => EstateSuccessWidget(
-                          type: state.estateAddedByUser[index].propertyType,
-                          purpose: state.estateAddedByUser[index].propertyPurpose,
-                          location: state.estateAddedByUser[index].location,
-                          space: state.estateAddedByUser[index].space,
-                          price: state.estateAddedByUser[index].price,
-                          rooms: state.estateAddedByUser[index].rooms,
-                          bathrooms: state.estateAddedByUser[index].bathrooms,
-                          id: state.estateAddedByUser[index].id,
-                          estateImage: state.estateAddedByUser[index].image,
-                      status:state.estateAddedByUser[index].status),
+                        type: state.estateAddedByUser[index].propertyType,
+                        purpose: state.estateAddedByUser[index].propertyPurpose,
+                        location: state.estateAddedByUser[index].location,
+                        space: state.estateAddedByUser[index].space,
+                        price: state.estateAddedByUser[index].price,
+                        rooms: state.estateAddedByUser[index].rooms,
+                        bathrooms: state.estateAddedByUser[index].bathrooms,
+                        id: state.estateAddedByUser[index].id,
+                        estateImage: state.estateAddedByUser[index].image,
+                        status: state.estateAddedByUser[index].status,
+                        reasone: state.estateAddedByUser[index].reason ?? "",
+                      ),
                     );
                 } else if (state is UserEstateLoadingMyEstate) {
                   return LoadingWidget();

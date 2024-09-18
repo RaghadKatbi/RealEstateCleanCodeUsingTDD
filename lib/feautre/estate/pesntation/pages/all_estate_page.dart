@@ -127,7 +127,7 @@ class _AllEstatePageState extends State<AllEstatePage> {
                 purpose: state.estate[index].purpose,
                 rooms: state.estate[index].rooms ?? 0,
                 space: state.estate[index].space,
-                status: 'المزيد من التفاصيل',
+                status: 'المزيد من التفاصيل', reasone: '0',
               ),
             );
           }

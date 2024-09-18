@@ -29,7 +29,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   final List<Widget> page = [
     const CityPage(),
     const MyEstatePage(),
-    const FavEstatePage(),
+    FavEstatePage(),
     ReAgentPage(),
     const AboutUs(),
     const ContactUs(),

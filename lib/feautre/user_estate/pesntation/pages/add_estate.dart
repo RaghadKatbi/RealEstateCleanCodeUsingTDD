@@ -195,7 +195,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                   child: myTextFormField(
                     hintText: "السعر",
                     icon: Icons.money,
-                    textInputType: TextInputType.number,
+                    textInputType: TextInputType.visiblePassword,
                     maxLine: 1,
                     maxLength: 120,
                     textEditingController: _textControllers[4],
@@ -229,7 +229,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                   child: myTextFormField(
                     hintText: "مساحة البناء",
                     icon: Icons.space_bar,
-                    textInputType: TextInputType.number,
+                    textInputType: TextInputType.visiblePassword,
                     maxLine: 1,
                     maxLength: 120,
                     textEditingController: _textControllers[6],
@@ -281,7 +281,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                   child: myTextFormField(
                     hintText: "الطابق",
                     icon: Icons.stairs_outlined,
-                    textInputType: TextInputType.number,
+                    textInputType: TextInputType.visiblePassword,
                     maxLine: 1,
                     maxLength: 120,
                     textEditingController: _textControllers[9],
@@ -315,15 +315,12 @@ class _AddRealEstateState extends State<AddRealEstate> {
                   child: myTextFormField(
                     hintText: "سعر المتر",
                     icon: Icons.money,
-                    textInputType: TextInputType.number,
+                    textInputType: TextInputType.visiblePassword,
                     maxLine: 1,
                     maxLength: 120,
                     textEditingController: _textControllers[11],
                     enable: false,
                     validator: (value) {
-                    if (value == null || value.isEmpty)
-                    return 'الرجاء ملئ الحقل';
-                    return null;
                   },
                   ),
                 ),
@@ -332,7 +329,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                   child: myTextFormField(
                     hintText: "عرض الشارع",
                     icon: Icons.straight_outlined,
-                    textInputType: TextInputType.number,
+                    textInputType: TextInputType.visiblePassword,
                     maxLine: 1,
                     maxLength: 120,
                     textEditingController: _textControllers[12],
@@ -539,7 +536,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                                           license: _textControllers[8].text,
                                           floor: _textControllers[9].text,
                                           description: _textControllers[10].text,
-                                          meterPrice: int.parse(_textControllers[11].text),
+                                          meterPrice: _textControllers[11].text,
                                           streetWidth: _textControllers[12].text,
                                           location: _textControllers[13].text,
                                           features: _textControllers[14].text,

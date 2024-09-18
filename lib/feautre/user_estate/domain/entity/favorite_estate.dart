@@ -14,7 +14,7 @@ class FavoriteEstate extends Equatable {
   final String floor;
   final String description;
   final int numberShow;
-  final int? meterPrice;
+  final String? meterPrice;
   final String streetWidth;
   final String location;
   final String features;

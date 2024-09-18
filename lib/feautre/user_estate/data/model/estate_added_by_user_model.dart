@@ -45,7 +45,7 @@ class EstateAddedByUserModel extends EstateAddedByUser {
       license: json['license'] ?? "",
       floor: json['floor'] ?? 0,
       description: json['description'] ?? "",
-      meterPrice: json['meter_price'] != null ? int.tryParse(json['meter_price']) ?? 0 : 0,
+      meterPrice: json['meter_price'] ??  "0",
       streetWidth: json['street_width'] ?? 0,
       location: json['location'] ?? "",
       features: json['features'] ?? "",

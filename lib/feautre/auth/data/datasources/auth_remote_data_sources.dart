@@ -23,7 +23,9 @@ class AuthRemoteDataSourcesDio implements AuthRemoteDataSources {
       final user = LoginModel.fromJson(response);
      final prefs = await SharedPreferences.getInstance();
      await prefs.setString('token', user.token);
-     await prefs.setString("'tokenExpirationTime'", DateTime.now().toIso8601String());
+     await prefs.setString("tokenExpirationTime", DateTime.now().toIso8601String());
+     print(DateTime.now());
+
       return user;
   }
   @override

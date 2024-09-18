@@ -13,7 +13,7 @@ class EstateAddedByUser extends Equatable {
   final String license;
   final String floor;
   final String description;
-  final int meterPrice;
+  final String? meterPrice;
   final String streetWidth;
   final String location;
   final String features;
@@ -71,7 +71,6 @@ class EstateAddedByUser extends Equatable {
         license,
         floor,
         description,
-        meterPrice,
         streetWidth,
         location,
         features,
@@ -82,5 +81,6 @@ class EstateAddedByUser extends Equatable {
         note,
         updatedAt,
         createdAt,
+        meterPrice ?? ""
       ];
 }

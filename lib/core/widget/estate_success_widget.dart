@@ -15,6 +15,7 @@ class EstateSuccessWidget extends StatefulWidget {
   final int bathrooms;
   final String status;
   final int id;
+  final String reasone;
 
   const EstateSuccessWidget(
       {super.key,
@@ -27,7 +28,8 @@ class EstateSuccessWidget extends StatefulWidget {
       required this.bathrooms,
       required this.id,
       required this.estateImage,
-      required this.status});
+      required this.status,
+      required this.reasone});
 
   @override
   State<EstateSuccessWidget> createState() => EstateSuccessWidgetState();
@@ -39,8 +41,9 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>
   bool isHovered = false;
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
-  late String st;
-  late String image;
+  late String st="معلق";
+  late String image="";
+
   @override
   void initState() {
     super.initState();
@@ -50,27 +53,19 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>
     );
     _scaleAnimation =
         Tween<double>(begin: 1.0, end: 1.1).animate(_animationController);
-    if(widget.status=="pend")
-      {
-        st="معلق";
-        image ="https://proengaqar.com/img/temp/${widget.estateImage}";
-      }
-    else if(widget.status=="cancel")
-      {
-        st="مرفوض";
-        image ="https://proengaqar.com/img/temp/${widget.estateImage}";
-      }
-    else if(widget.status=="accept")
-    {
-      st="مقبول";
-      image ="https://proengaqar.com/img/estate/${widget.estateImage}";
+    if (widget.status == "pend") {
+      st = "معلق";
+      image = "https://proengaqar.com/img/temp/${widget.estateImage}";
+    } else if (widget.status == "cancle") {
+      st = "مرفوض";
+      image = "https://proengaqar.com/img/temp/${widget.estateImage}";
+    } else if (widget.status == "accept") {
+      st = "مقبول";
+      image = "https://proengaqar.com/img/estate/${widget.estateImage}";
+    } else if (widget.status == "المزيد من التفاصيل") {
+      st = "المزيد من التفاصيل";
+      image = "https://proengaqar.com/img/estate/${widget.estateImage}";
     }
-    else if(widget.status=="المزيد من التفاصيل")
-    {
-      st="المزيد من التفاصيل";
-      image ="https://proengaqar.com/img/estate/${widget.estateImage}";
-    }
-
   }
 
   @override
@@ -98,15 +93,18 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>
     return MouseRegion(
       onHover: (_) => _handleHover(isHovered),
       child: InkWell(
-        onTap: st=="المزيد من التفاصيل" || st=="مقبول"?()  {
-          context.read<DetailsCubit>().getEstate(widget.id);
-          context.read<SetFavoriateCubit>().isFavorite(widget.id);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyBottomNavigationBar(8, "", widget.id),
-              ));
-        }:(){},
+        onTap: st == "المزيد من التفاصيل" || st == "مقبول"
+            ? () {
+                context.read<DetailsCubit>().getEstate(widget.id);
+                context.read<SetFavoriateCubit>().isFavorite(widget.id);
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MyBottomNavigationBar(8, "", widget.id),
+                    ));
+              }
+            : () {},
         child: AnimatedBuilder(
             animation: _animationController,
             builder: (context, child) {
@@ -127,7 +125,8 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>
                                     topRight: Radius.circular(15),
                                     topLeft: Radius.circular(15)),
                                 clipBehavior: Clip.antiAlias,
-                                child: Image.network(image,
+                                child: Image.network(
+                                  image,
                                   height: 200,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
@@ -143,7 +142,7 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>
                                       padding: const EdgeInsets.all(2.0),
                                       child: Text(
                                         selectionColor: Colors.blue.shade50,
-                                       st,
+                                        st,
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,
@@ -199,72 +198,85 @@ class EstateSuccessWidgetState extends State<EstateSuccessWidget>
                               ],
                             ),
                           ),
-                       widget.type!="ارض" ?  Container(
-                            color: Colors.black,
-                            child: Padding(
-                              padding: EdgeInsets.all(20.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.system_update_alt_outlined,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(
-                                        width: 6,
-                                      ),
-                                      Text(
-                                        widget.space,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'cairo',
+                          widget.type != "أرض"
+                              ? Container(
+                                  color: Colors.black,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(20.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.system_update_alt_outlined,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(
+                                              width: 6,
+                                            ),
+                                            Text(
+                                              widget.space,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'cairo',
+                                              ),
+                                            )
+                                          ],
                                         ),
-                                      )
-                                    ],
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.roller_shades_outlined,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(
+                                              width: 6,
+                                            ),
+                                            Text(
+                                              "${widget.rooms}",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'cairo',
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.bathtub_outlined,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(
+                                              width: 6,
+                                            ),
+                                            Text(
+                                              "${widget.bathrooms}",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'cairo',
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.roller_shades_outlined,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(
-                                        width: 6,
-                                      ),
-                                      Text(
-                                        "${widget.rooms}",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'cairo',
-                                        ),
-                                      )
-                                    ],
+                                )
+                              : Container(),
+                          widget.reasone != '0'
+                              ? Container(
+                                  width: double.infinity,
+                                  color: Colors.red,
+                                  child: Text(
+                                    textAlign: TextAlign.right,
+                                    "${widget.reasone}",
+                                    style: TextStyle(color: Colors.white),
                                   ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.bathtub_outlined,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(
-                                        width: 6,
-                                      ),
-                                      Text(
-                                        "${widget.bathrooms}",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'cairo',
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ): Container()
+                                )
+                              : Container()
                         ],
                       )));
             }),

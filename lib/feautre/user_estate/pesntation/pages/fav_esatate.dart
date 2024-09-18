@@ -3,9 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:real_estate/core/constance/string.dart';
 import 'package:real_estate/core/widget/estate_success_widget.dart';
 import 'package:real_estate/feautre/user_estate/pesntation/favEstate/fav_estate_cubit.dart';
-
 import '../../../../core/widget/loading.dart';
-import '../../../../my_bottom_nav.dart';
+
 
 class FavEstatePage extends StatefulWidget {
   const FavEstatePage({super.key});
@@ -57,7 +56,7 @@ class _FavEstatePageState extends State<FavEstatePage> {
                         bathrooms: state.favoriteEstate[index].bathroom,
                         id: state.favoriteEstate[index].id,
                         estateImage: state.favoriteEstate[index].estateImage,
-                        status: 'المزيد من التفاصيل',
+                        status: 'المزيد من التفاصيل', reasone: '',
                       ),
                     );
                 } else if (state is UserEstateLoadingMyFavEstate) {

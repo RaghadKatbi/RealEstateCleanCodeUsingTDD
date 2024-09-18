@@ -51,7 +51,7 @@ class FavoriteEstateModel extends FavoriteEstate {
           updatedAt: json['updated_at']??"",
           buildingRank: json['building_rank'] != null ? json['building_rank'] : 0,
           license: json['license'] ?? "",
-          meterPrice: json['meter_price'] != null ? json['meter_price'] :0,
+          meterPrice: json['meter_price'] != null ? json['meter_price'] :"0",
           numberShow: json['number_show'] != null ? json['number_show'] : 0,
           status: json['status_'] != null ? json['status_'] : "",
           userId: json['user_id'] != null ? json['user_id'] : 0,
