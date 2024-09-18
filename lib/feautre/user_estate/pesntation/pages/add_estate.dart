@@ -15,6 +15,7 @@ import '../../../city/pesntation/city_bloc/city_cubit.dart';
 import '../../../city/pesntation/neighborhood_bloc/neighborhood_cubit.dart';
 import '../../../city/pesntation/region_bloc/region_cubit.dart';
 import '../../data/model/estate_added_by_user_model.dart';
+import '../bloc_user_estate/user_estate_cubit.dart';
 
 class AddRealEstate extends StatefulWidget {
   const AddRealEstate({super.key});
@@ -103,6 +104,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
       body: PopScope(
         canPop: false,
         onPopInvoked : (didPop){
+          context.read<UserEstateCubit>().getAllEstateAddedByUser();
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyBottomNavigationBar(1, "", 0),));
         },
         child: SingleChildScrollView(
@@ -321,6 +323,7 @@ class _AddRealEstateState extends State<AddRealEstate> {
                     textEditingController: _textControllers[11],
                     enable: false,
                     validator: (value) {
+                      return null;
                   },
                   ),
                 ),

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:real_estate/feautre/REagent/pesentation/pages/RE_agent.dart';
 import 'package:real_estate/feautre/city/pesntation/pages/city_page.dart';
 import 'package:real_estate/feautre/estate/pesntation/pages/all_estate_page.dart';
+import 'package:real_estate/feautre/user_estate/pesntation/bloc_user_estate/user_estate_cubit.dart';
 import 'package:real_estate/feautre/user_estate/pesntation/pages/my_estate.dart';
 import 'core/widget/my_drawer.dart';
 import 'core/widget/mycustom_appbar.dart';
 import 'feautre/about_us/pesntation/page/about_us_page.dart';
 import 'feautre/contact_us/pesntation/pages/contact_us_pages.dart';
 import 'feautre/estate/pesntation/pages/detailse_estate.dart';
+import 'feautre/user_estate/pesntation/favEstate/fav_estate_cubit.dart';
 import 'feautre/user_estate/pesntation/pages/add_estate.dart';
 import 'feautre/user_estate/pesntation/pages/fav_esatate.dart';
 
@@ -24,6 +27,7 @@ class MyBottomNavigationBar extends StatefulWidget {
 }
 
 class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
+
   late int selectedIndex = widget.i;
   int iconSelect = 0;
   final List<Widget> page = [
@@ -56,6 +60,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<UserEstateCubit>().getAllEstateAddedByUser();
+    context.read<FavEstateCubit>().getFavoriteEstate();
     final GlobalKey<ScaffoldState> _sKey = GlobalKey<ScaffoldState>();
     return SafeArea(
       child: Scaffold(
